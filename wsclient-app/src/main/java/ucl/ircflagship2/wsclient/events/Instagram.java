@@ -21,26 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.scheduler;
+package ucl.ircflagship2.wsclient.events;
 
-import javax.annotation.Resource;
-import javax.ejb.Singleton;
-import javax.ejb.LocalBean;
-import javax.ejb.Startup;
-import javax.ejb.TimerService;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-@Singleton
-@LocalBean
-@Startup
-public class CallTimer {
-  
-  @Resource
-  TimerService timerService;
+@Qualifier
+@Retention(RUNTIME)
+@Target({FIELD, PARAMETER})
+public @interface Instagram {
 
-  // Add business logic below. (Right-click in editor and choose
-  // "Insert Code > Add Business Method")
 }

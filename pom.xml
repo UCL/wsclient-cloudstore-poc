@@ -8,47 +8,18 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>wsclient-scheduler</module>
-    <module>wsclient-instagram</module>
     <module>wsclient-main</module>
+    <module>wsclient-app</module>
   </modules>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <dep.javaeeapi.version>7.0</dep.javaeeapi.version>
-
     <plu.tidy.version>1.1.0</plu.tidy.version>
-
-    <conf.ejbVersion>3.2</conf.ejbVersion>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>javax</groupId>
-        <artifactId>javaee-api</artifactId>
-        <version>${dep.javaeeapi.version}</version>
-        <scope>provided</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-ejb-plugin</artifactId>
-          <version>2.3</version>
-          <configuration>
-            <ejbVersion>${conf.ejbVersion}</ejbVersion>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

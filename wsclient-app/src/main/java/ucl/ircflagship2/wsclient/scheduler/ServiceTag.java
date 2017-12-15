@@ -21,40 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.main;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import org.glassfish.embeddable.Deployer;
-import org.glassfish.embeddable.GlassFish;
-import org.glassfish.embeddable.GlassFishException;
-import org.glassfish.embeddable.GlassFishRuntime;
+package ucl.ircflagship2.wsclient.scheduler;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public class DeployOnGlassfish {
-
-  /**
-   * @param args the command line arguments
-   * @throws org.glassfish.embeddable.GlassFishException
-   * @throws java.net.URISyntaxException
-   */
-  public static void main(String[] args) throws GlassFishException,
-          URISyntaxException {
-
-    GlassFish glassfish = GlassFishRuntime.bootstrap().newGlassFish();
-    glassfish.start();
-
-    Deployer deployer = glassfish.getDeployer();
-
-    for (String arg : args) {
-      String ejbref[] = arg.split("=");
-      File ejbjar = new File(ejbref[1]);
-      deployer.deploy(ejbjar, "--name=" + ejbref[0], "--contextroot=" + ejbref[0], "--force=true");
-    }
-    //glassfish.stop();
-  }
-
+public enum ServiceTag {
+  GOOGLE_FLU,
+  INSTAGRAM,
+  TWITTER
 }

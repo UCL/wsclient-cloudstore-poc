@@ -15,6 +15,7 @@
     <dep.glassfish.version>5.0</dep.glassfish.version>
     <plu.appassembler.version>2.0.0</plu.appassembler.version>
     <conf.appassembler.repo>${project.build.directory}/app/repo</conf.appassembler.repo>
+    <conf.appassembler.appname>wsclient-app</conf.appassembler.appname>
   </properties>
 
   <dependencies>
@@ -25,7 +26,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>wsclient-scheduler</artifactId>
+      <artifactId>wsclient-app</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
@@ -50,8 +51,8 @@
             <program>
               <mainClass>ucl.ircflagship2.wsclient.main.DeployOnGlassfish</mainClass>
               <commandLineArguments>
-                <!-- provided as [beanname]=[path-to-jar] -->
-                <commandLineArgument>scheduler=${conf.appassembler.repo}/wsclient-scheduler-${project.version}.jar</commandLineArgument>
+                <!-- provided as [ejb-module-name]=[path-to-jar] -->
+                <commandLineArgument>${conf.appassembler.appname}=${conf.appassembler.repo}/${conf.appassembler.appname}-${project.version}.jar</commandLineArgument>
               </commandLineArguments>
               <id>glassfish5</id>
               <platforms>

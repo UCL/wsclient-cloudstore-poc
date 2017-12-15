@@ -21,40 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.main;
+package ucl.ircflagship2.wsclient.util;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import org.glassfish.embeddable.Deployer;
-import org.glassfish.embeddable.GlassFish;
-import org.glassfish.embeddable.GlassFishException;
-import org.glassfish.embeddable.GlassFishRuntime;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Base64;
+import java.util.Optional;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public class DeployOnGlassfish {
+public class Converter {
 
-  /**
-   * @param args the command line arguments
-   * @throws org.glassfish.embeddable.GlassFishException
-   * @throws java.net.URISyntaxException
-   */
-  public static void main(String[] args) throws GlassFishException,
-          URISyntaxException {
-
-    GlassFish glassfish = GlassFishRuntime.bootstrap().newGlassFish();
-    glassfish.start();
-
-    Deployer deployer = glassfish.getDeployer();
-
-    for (String arg : args) {
-      String ejbref[] = arg.split("=");
-      File ejbjar = new File(ejbref[1]);
-      deployer.deploy(ejbjar, "--name=" + ejbref[0], "--contextroot=" + ejbref[0], "--force=true");
+  public static Optional<String> timerInfoToString(final Serializable input) {
+    if (input instanceof String) {
+      return Optional.of((String) input);
+    } else {
+      return Optional.empty();
     }
-    //glassfish.stop();
   }
 
 }

@@ -8,19 +8,34 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>wsclient-scheduler</artifactId>
+  <artifactId>wsclient-app</artifactId>
   <packaging>ejb</packaging>
 
-  <name>wsclient-scheduler</name>
+  <name>wsclient-app</name>
 
   <properties>
-
+    <dep.javaeeapi.version>7.0</dep.javaeeapi.version>
+    <conf.ejbVersion>3.2</conf.ejbVersion>
   </properties>
 
   <dependencies>
     <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <version>1.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
+      <version>${dep.javaeeapi.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -29,6 +44,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ejb-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <ejbVersion>${conf.ejbVersion}</ejbVersion>
+        </configuration>
       </plugin>
     </plugins>
   </build>

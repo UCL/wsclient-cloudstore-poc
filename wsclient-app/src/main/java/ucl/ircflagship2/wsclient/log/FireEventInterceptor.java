@@ -21,40 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.main;
+package ucl.ircflagship2.wsclient.log;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import org.glassfish.embeddable.Deployer;
-import org.glassfish.embeddable.GlassFish;
-import org.glassfish.embeddable.GlassFishException;
-import org.glassfish.embeddable.GlassFishRuntime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.Timer;
+import javax.interceptor.AroundTimeout;
+import javax.interceptor.InvocationContext;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public class DeployOnGlassfish {
+public class FireEventInterceptor {
 
-  /**
-   * @param args the command line arguments
-   * @throws org.glassfish.embeddable.GlassFishException
-   * @throws java.net.URISyntaxException
-   */
-  public static void main(String[] args) throws GlassFishException,
-          URISyntaxException {
-
-    GlassFish glassfish = GlassFishRuntime.bootstrap().newGlassFish();
-    glassfish.start();
-
-    Deployer deployer = glassfish.getDeployer();
-
-    for (String arg : args) {
-      String ejbref[] = arg.split("=");
-      File ejbjar = new File(ejbref[1]);
-      deployer.deploy(ejbjar, "--name=" + ejbref[0], "--contextroot=" + ejbref[0], "--force=true");
+  @AroundTimeout
+  public Object interceptFiring(InvocationContext iCtx) throws Exception {
+    Object obj = iCtx.getTimer();
+    if (obj instanceof Timer) {
+      Timer timer = (Timer) obj;
+      Logger.getLogger("myLogger").log(Level.INFO, "Calling fireEvent() --- {0}", timer.getInfo());
     }
-    //glassfish.stop();
+    return iCtx.proceed();
   }
 
 }

@@ -21,3 +21,4 @@ nbdist/
 
 # Glassfish
 derby.log
+/wsclient-app/nbproject/
