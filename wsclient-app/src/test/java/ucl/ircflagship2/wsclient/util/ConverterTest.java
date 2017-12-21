@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package util;
+package ucl.ircflagship2.wsclient.util;
 
 import ucl.ircflagship2.wsclient.util.Converter;
 import java.io.Serializable;

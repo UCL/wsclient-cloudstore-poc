@@ -23,6 +23,7 @@
  */
 package ucl.ircflagship2.wsclient.scheduler;
 
+import java.util.function.BiConsumer;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
@@ -49,14 +50,17 @@ import ucl.ircflagship2.wsclient.util.Converter;
 @Interceptors(FireEventInterceptor.class)
 public class CallTimer {
 
+  private final int INTERVAL_DISABLE = -1;
+  private final int INTERVAL_MIN = 10000;
+
   @Resource
   private TimerService timerService;
 
   @Resource(name = "instagramInterval")
-  private Integer instagramInterval = 10000;
+  private Integer instagramInterval = INTERVAL_DISABLE;
 
   @Resource(name = "twitterInterval")
-  private Integer twitterInterval = 10000;
+  private Integer twitterInterval = INTERVAL_DISABLE;
 
   @Inject
   @Instagram
@@ -66,10 +70,20 @@ public class CallTimer {
   @Twitter
   private Event<Long> callTwitter;
 
+  private final BiConsumer<Integer, String> initTimer = (i, s) -> {
+    if (i != INTERVAL_DISABLE) {
+      if (i > INTERVAL_MIN) {
+        timerService.createTimer(0, i, s);
+      } else {
+        timerService.createTimer(0, INTERVAL_MIN, s);
+      }
+    }
+  };
+
   @PostConstruct
   public void initialise() {
-    timerService.createTimer(0, instagramInterval, ServiceTag.INSTAGRAM.toString());
-    timerService.createTimer(0, twitterInterval, ServiceTag.TWITTER.toString());
+    initTimer.accept(instagramInterval, ServiceTag.INSTAGRAM.toString());
+    initTimer.accept(twitterInterval, ServiceTag.TWITTER.toString());
   }
 
   @Timeout
