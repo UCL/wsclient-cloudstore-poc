@@ -23,11 +23,7 @@
  */
 package ucl.ircflagship2.wsclient.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Base64;
 import java.util.Optional;
 
 /**
