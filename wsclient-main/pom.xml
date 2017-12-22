@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>ucl.ircflagship2</groupId>
+    <artifactId>wsclient-s3-poc</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>wsclient-main</artifactId>
+  <packaging>jar</packaging>
+
+  <properties>
+    <dep.glassfish.version>5.0</dep.glassfish.version>
+    <plu.appassembler.version>2.0.0</plu.appassembler.version>
+    <conf.appassembler.repo>${project.build.directory}/app/repo</conf.appassembler.repo>
+    <conf.appassembler.appname>wsclient-app</conf.appassembler.appname>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.glassfish.main.extras</groupId>
+      <artifactId>glassfish-embedded-all</artifactId>
+      <version>${dep.glassfish.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>wsclient-app</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>${plu.appassembler.version}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <assembleDirectory>${project.build.directory}/app</assembleDirectory>
+          <programs>
+            <program>
+              <mainClass>ucl.ircflagship2.wsclient.main.DeployOnGlassfish</mainClass>
+              <commandLineArguments>
+                <!-- provided as [ejb-module-name]=[path-to-jar] -->
+                <commandLineArgument>${conf.appassembler.appname}=${conf.appassembler.repo}/${conf.appassembler.appname}-${project.version}.jar</commandLineArgument>
+              </commandLineArguments>
+              <id>glassfish5</id>
+              <platforms>
+                <platform>unix</platform>
+              </platforms>
+            </program>
+          </programs>
+          <repositoryLayout>flat</repositoryLayout>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
