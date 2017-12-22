@@ -23,23 +23,31 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-@PrepareForTest({InstagramSettings.class})
 public class InstagramSettingsTest {
 
   @Test
-  public void testConstructor() {
-    PowerMockito.mockStatic(System.class);
-    Mockito.when(System.getenv("INSTAGRAM_ACCESS_TOKEN")).thenReturn("FOO");
+  public void testQueryParameters() {
+    System.out.println("testQueryParameters()");
+    String expected = "|access_token=footoken&|distance=5000&|lat=51.538000&|lng=-0.115000";
     InstagramSettings instance = new InstagramSettings();
+    String actual = instance.queryParameters();
+    assertEquals(expected, actual, "#instance.queryParameters() should return 4 parameters in alphabetical order separated by | ");
+  }
+
+  @Test
+  public void testGetSignature() {
+    System.out.println("testGetSignature()");
+    String expected = "a4c20ef35ab3fe30cb06efc2b039329bca71971bb765dd5658c084cf55103b0a";
+    InstagramSettings instance = new InstagramSettings();
+    String actual = instance.getSignature().get();
+    assertEquals(expected, actual, "#instance.getSignature() should return the right signature based on \"barsecret\" as secret");
   }
 
 }

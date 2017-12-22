@@ -44,9 +44,9 @@ public class ConverterTest {
     System.out.println("testToString()");
     String expectedString = "INSTAGRAM";
     Serializable serialStr = ServiceTag.INSTAGRAM.toString();
-    Optional<String> result = Converter.timerInfoToString(serialStr);
+    Optional<String> actual = Converter.timerInfoToString(serialStr);
     Optional<String> expected = Optional.of(expectedString);
-    assertEquals(expected, result, "Converter.timerInfoToString(serialStr) should return Optional.of(\"INSTAGRAM\")");
+    assertEquals(expected, actual, "Converter.timerInfoToString(serialStr) should return Optional.of(\"INSTAGRAM\")");
   }
 
 }
