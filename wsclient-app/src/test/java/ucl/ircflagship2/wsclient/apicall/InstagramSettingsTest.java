@@ -23,50 +23,23 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import ucl.ircflagship2.wsclient.events.Instagram;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-@Stateless
-@LocalBean
-public class InstagramCall {
+@PrepareForTest({InstagramSettings.class})
+public class InstagramSettingsTest {
 
-  private final String BASE_URL = "https://api.instagram.com/v1";
-  private Client client;
-
-  @Inject
-  private InstagramSettings settings;
-
-  @PostConstruct
-  public void init() {
-    client = ClientBuilder.newClient();
-  }
-
-  public void onEvent(@Observes @Instagram Long timerLong) {
-
-    WebTarget webTarget = client.target(BASE_URL)
-            .path(settings.getEndpoint());
-
-    settings.getSignature().ifPresent((String s) -> {
-      webTarget.queryParam("sig", s);
-    });
-
-  }
-
-  @PreDestroy
-  public void close() {
-    client.close();
+  @Test
+  public void testConstructor() {
+    PowerMockito.mockStatic(System.class);
+    Mockito.when(System.getenv("INSTAGRAM_ACCESS_TOKEN")).thenReturn("FOO");
+    InstagramSettings instance = new InstagramSettings();
   }
 
 }

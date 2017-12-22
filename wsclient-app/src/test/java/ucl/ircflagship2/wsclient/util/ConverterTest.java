@@ -36,9 +36,6 @@ import ucl.ircflagship2.wsclient.scheduler.ServiceTag;
  */
 public class ConverterTest {
 
-  public ConverterTest() {
-  }
-
   /**
    * Test of timerInfoToString method, of class Converter.
    */

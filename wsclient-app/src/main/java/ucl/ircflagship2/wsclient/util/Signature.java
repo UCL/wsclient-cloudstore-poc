@@ -21,52 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.apicall;
+package ucl.ircflagship2.wsclient.util;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import ucl.ircflagship2.wsclient.events.Instagram;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.SortedMap;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-@Stateless
-@LocalBean
-public class InstagramCall {
+public class Signature {
 
-  private final String BASE_URL = "https://api.instagram.com/v1";
-  private Client client;
+  private static final String PARAM_FORMAT = "|%s=%s";
+  private static final String MAC_INSTANCE = "HmacSHA256";
 
-  @Inject
-  private InstagramSettings settings;
+  public static String signInstagramCall(
+          String endpoint,
+          SortedMap<String, String> paramMap,
+          String secret
+  ) throws NoSuchAlgorithmException, InvalidKeyException {
+    String signature = endpoint;
+    signature = paramMap.entrySet().stream()
+            .map((e) -> String.format(PARAM_FORMAT, e.getKey(), e.getValue()))
+            .reduce(signature, String::concat);
+    Mac macHasher = Mac.getInstance(MAC_INSTANCE);
+    macHasher.init(new SecretKeySpec(secret.getBytes(), MAC_INSTANCE));
+    byte[] hash = macHasher.doFinal(signature.getBytes());
+    signature = DatatypeConverter.printHexBinary(hash);
 
-  @PostConstruct
-  public void init() {
-    client = ClientBuilder.newClient();
-  }
-
-  public void onEvent(@Observes @Instagram Long timerLong) {
-
-    WebTarget webTarget = client.target(BASE_URL)
-            .path(settings.getEndpoint());
-
-    settings.getSignature().ifPresent((String s) -> {
-      webTarget.queryParam("sig", s);
-    });
-
-  }
-
-  @PreDestroy
-  public void close() {
-    client.close();
+    return signature.toLowerCase();
   }
 
 }

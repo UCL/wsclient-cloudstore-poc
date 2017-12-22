@@ -21,52 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.apicall;
+package ucl.ircflagship2.wsclient.util;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import ucl.ircflagship2.wsclient.events.Instagram;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-@Stateless
-@LocalBean
-public class InstagramCall {
+public class SignatureTest {
 
-  private final String BASE_URL = "https://api.instagram.com/v1";
-  private Client client;
-
-  @Inject
-  private InstagramSettings settings;
-
-  @PostConstruct
-  public void init() {
-    client = ClientBuilder.newClient();
-  }
-
-  public void onEvent(@Observes @Instagram Long timerLong) {
-
-    WebTarget webTarget = client.target(BASE_URL)
-            .path(settings.getEndpoint());
-
-    settings.getSignature().ifPresent((String s) -> {
-      webTarget.queryParam("sig", s);
-    });
-
-  }
-
-  @PreDestroy
-  public void close() {
-    client.close();
+  @Test
+  public void testSignInstagramCall() throws NoSuchAlgorithmException, InvalidKeyException {
+    System.out.println("testSignForInstagram()");
+    String expected = "260634b241a6cfef5e4644c205fb30246ff637591142781b86e2075faf1b163a";
+    String endpoint = "/media/657988443280050001_25025320";
+    SortedMap<String, String> parameters = new TreeMap<>();
+    parameters.put("access_token", "fb2e77d.47a0479900504cb3ab4a1f626d174d2d");
+    parameters.put("count", "10");
+    String secret = "6dc1787668c64c939929c17683d7cb74";
+    String actual = Signature.signInstagramCall(endpoint, parameters, secret);
+    assertEquals(expected, actual);
   }
 
 }

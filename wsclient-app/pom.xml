@@ -17,6 +17,8 @@
     <dep.javaeeapi.version>7.0</dep.javaeeapi.version>
     <dep.junit.version>5.0.2</dep.junit.version>
     <dep.junit-surefire.version>1.0.2</dep.junit-surefire.version>
+    <dep.mockito.version>2.8.9</dep.mockito.version>
+    <dep.powermock.version>1.7.3</dep.powermock.version>
     <plu.ejb.version>2.3</plu.ejb.version>
     <plu.surefire.version>2.19.1</plu.surefire.version>
     <conf.ejbVersion>3.2</conf.ejbVersion>
@@ -27,6 +29,24 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${dep.junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${dep.mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito2</artifactId>
+      <version>${dep.powermock.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>${dep.powermock.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
