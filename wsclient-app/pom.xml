@@ -18,6 +18,8 @@
     <dep.jmockit.version>1.38</dep.jmockit.version>
     <dep.junit.version>5.0.2</dep.junit.version>
     <dep.junit-surefire.version>1.0.2</dep.junit-surefire.version>
+    <dep.javaxwsapi.version>2.1</dep.javaxwsapi.version>
+    <dep.jersey.version>2.26</dep.jersey.version>
     <plu.ejb.version>2.3</plu.ejb.version>
     <plu.surefire.version>2.19.1</plu.surefire.version>
     <conf.ejbVersion>3.2</conf.ejbVersion>
@@ -41,6 +43,24 @@
       <artifactId>javaee-api</artifactId>
       <version>${dep.javaeeapi.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>${dep.javaxwsapi.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${dep.jersey.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.inject</groupId>
+      <artifactId>jersey-hk2</artifactId>
+      <version>${dep.jersey.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

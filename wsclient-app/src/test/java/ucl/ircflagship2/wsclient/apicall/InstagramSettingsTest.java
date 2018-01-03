@@ -35,10 +35,10 @@ public class InstagramSettingsTest {
   @Test
   public void testQueryParameters() {
     System.out.println("testQueryParameters()");
-    String expected = "|access_token=footoken&|distance=5000&|lat=51.538000&|lng=-0.115000";
+    String expected = "access_token=footoken&distance=5000&lat=51.538000&lng=-0.115000";
     InstagramSettings instance = new InstagramSettings();
     String actual = instance.queryParameters();
-    assertEquals(expected, actual, "#instance.queryParameters() should return 4 parameters in alphabetical order separated by | ");
+    assertEquals(expected, actual, "#instance.queryParameters() should return 4 parameters in alphabetical order separated by & ");
   }
 
   @Test

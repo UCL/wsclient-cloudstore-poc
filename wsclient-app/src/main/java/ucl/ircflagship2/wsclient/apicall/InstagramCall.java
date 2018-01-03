@@ -23,6 +23,7 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
@@ -32,6 +33,8 @@ import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import ucl.ircflagship2.wsclient.events.Instagram;
 
 /**
@@ -42,8 +45,8 @@ import ucl.ircflagship2.wsclient.events.Instagram;
 @LocalBean
 public class InstagramCall {
 
-  private final String BASE_URL = "https://api.instagram.com/v1";
   private Client client;
+  private WebTarget webTarget;
 
   @Inject
   private InstagramSettings settings;
@@ -51,16 +54,23 @@ public class InstagramCall {
   @PostConstruct
   public void init() {
     client = ClientBuilder.newClient();
+
+    webTarget = client.target(settings.getBaseUrl())
+            .path(settings.getEndpoint());
+
+    settings.getParameterMap().entrySet().forEach((Map.Entry<String, String> entry) -> {
+      webTarget.queryParam(entry.getKey(), entry.getValue());
+    });
+
+    settings.getSignature().ifPresent((String s) -> {
+      webTarget.queryParam(settings.getSignatureKey(), s);
+    });
+
   }
 
   public void onEvent(@Observes @Instagram Long timerLong) {
 
-    WebTarget webTarget = client.target(BASE_URL)
-            .path(settings.getEndpoint());
-
-    settings.getSignature().ifPresent((String s) -> {
-      webTarget.queryParam("sig", s);
-    });
+    Response response = webTarget.request(MediaType.APPLICATION_JSON).get();
 
   }
 

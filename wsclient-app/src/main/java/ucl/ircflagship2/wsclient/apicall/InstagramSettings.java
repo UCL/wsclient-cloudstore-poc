@@ -39,10 +39,12 @@ import ucl.ircflagship2.wsclient.util.Signature;
 @ApplicationScoped
 public class InstagramSettings {
 
+  private final String BASE_URL = "https://api.instagram.com/v1";
   private final String ENDPOINT = "/media/search";
   private final String ACCESS_TOKEN = System.getenv("INSTAGRAM_ACCESS_TOKEN");
   private final String SECRET = System.getenv("INSTAGRAM_SECRET");
-  private final String QUERY_FORMAT = "|%s=%s";
+  private final String QUERY_FORMAT = "%s=%s";
+  private final String SIGNATURE_KEY = "sig";
   private final SortedMap<String, String> parameterMap = new TreeMap<>();
 
   public InstagramSettings() {
@@ -50,6 +52,14 @@ public class InstagramSettings {
     parameterMap.put("lat", "51.538000"); // Met Office station in Islington
     parameterMap.put("lng", "-0.115000"); // Met Office station in Islington
     parameterMap.put("distance", "5000"); // 5km radius
+  }
+
+  public String getBaseUrl() {
+    return BASE_URL;
+  }
+
+  public SortedMap<String, String> getParameterMap() {
+    return parameterMap;
   }
 
   public String queryParameters() {
@@ -69,6 +79,10 @@ public class InstagramSettings {
     } catch (NoSuchAlgorithmException | InvalidKeyException ex) {
       return Optional.empty();
     }
+  }
+
+  public String getSignatureKey() {
+    return SIGNATURE_KEY;
   }
 
 }
