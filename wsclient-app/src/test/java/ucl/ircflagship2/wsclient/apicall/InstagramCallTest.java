@@ -23,7 +23,6 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
-import java.net.MalformedURLException;
 import java.util.Optional;
 import java.util.TreeMap;
 import javax.ws.rs.client.WebTarget;

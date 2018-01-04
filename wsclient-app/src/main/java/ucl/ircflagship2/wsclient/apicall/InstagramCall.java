@@ -23,6 +23,7 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
+import java.io.StringReader;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -30,6 +31,9 @@ import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -72,6 +76,16 @@ public class InstagramCall {
 
     Response response = webTarget.request(MediaType.APPLICATION_JSON).get();
 
+    if (response.getStatusInfo() == Response.Status.OK) {
+
+      JsonReader jsonRead = Json.createReader(new StringReader(response.readEntity(String.class)));
+      JsonObject jsonObj = jsonRead.readObject();
+
+      if (!jsonObj.isEmpty()) {
+        // Persist to object store
+      }
+
+    }
   }
 
   @PreDestroy

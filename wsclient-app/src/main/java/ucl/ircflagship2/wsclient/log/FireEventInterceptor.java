@@ -40,7 +40,7 @@ public class FireEventInterceptor {
     Object obj = iCtx.getTimer();
     if (obj instanceof Timer) {
       Timer timer = (Timer) obj;
-      Logger.getLogger("myLogger").log(Level.INFO, "Calling fireEvent() --- {0}", timer.getInfo());
+      Logger.getLogger("EventLogger").log(Level.INFO, "Calling fireEvent() - {0}", timer.getInfo());
     }
     return iCtx.proceed();
   }
