@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
  */
 public class FireEventInterceptorTest {
 
-  private static final Logger LOGGER = Logger.getLogger("myLogger");
+  private static final Logger LOGGER = Logger.getLogger("EventLogger");
   private OutputStream outputStream;
   private StreamHandler streamHandler;
 
@@ -82,7 +82,7 @@ public class FireEventInterceptorTest {
     };
     instance.interceptFiring(invocationContext);
     streamHandler.flush();
-    String expected = "INFO Calling fireEvent() --- Instagram";
+    String expected = "INFO Calling fireEvent() - Instagram";
     String actual = outputStream.toString();
     assertEquals(expected, actual, "#instance.interceptFiring() should log Instagram");
   }

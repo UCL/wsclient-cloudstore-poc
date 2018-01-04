@@ -10,14 +10,16 @@
         <description>Timeout interval for Instagram API calls in milliseconds</description>
         <env-entry-name>instagramInterval</env-entry-name>
         <env-entry-type>java.lang.Integer</env-entry-type>
-        <env-entry-value>30000</env-entry-value>
+        <env-entry-value>3600000</env-entry-value>
       </env-entry>
+      <!--
       <env-entry>
-        <description>Timeout interval for Instagram API calls in milliseconds</description>
+        <description>Timeout interval for Twitter API calls in milliseconds</description>
         <env-entry-name>twitterInterval</env-entry-name>
         <env-entry-type>java.lang.Integer</env-entry-type>
-        <env-entry-value>45000</env-entry-value>
+        <env-entry-value>3600000</env-entry-value>
       </env-entry>
+      -->
     </session>
   </enterprise-beans>
 </ejb-jar>

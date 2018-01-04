@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Guzman <d.guzman at ucl.ac.uk>.
+ * Copyright 2018 David Guzman <d.guzman at ucl.ac.uk>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +23,23 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ws.rs.core.Feature;
+import org.glassfish.jersey.logging.LoggingFeature;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public class InstagramSettingsTest {
+public abstract class BaseCall {
 
-  @Test
-  public void testQueryParameters() {
-    System.out.println("testQueryParameters()");
-    String expected = "client_id=fooclient&distance=5000&lat=51.538000&lng=-0.115000";
-    InstagramSettings instance = new InstagramSettings();
-    String actual = instance.queryParameters();
-    assertEquals(expected, actual, "#instance.queryParameters() should return 4 parameters in alphabetical order separated by &");
-  }
+  protected Logger logger = Logger.getLogger(getClass().getName());
 
-  @Test
-  public void testGetSignature() {
-    System.out.println("testGetSignature()");
-    String expected = "7795d30a5104a4ddcbf3e7173f8aaa7b76dc23a13600832e5bb198498043dab2";
-    InstagramSettings instance = new InstagramSettings();
-    String actual = instance.getSignature().get();
-    assertEquals(expected, actual, "#instance.getSignature() should return the right signature based on \"barsecret\" as secret");
+  protected Feature feature = new LoggingFeature(logger, Level.INFO, null, null);
+
+  protected void log(String message) {
+    logger.log(Level.INFO, message);
   }
 
 }

@@ -23,23 +23,23 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
-import java.io.StringReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import ucl.ircflagship2.wsclient.events.Instagram;
+import ucl.ircflagship2.wsclient.persist.ObjectStore;
 
 /**
  *
@@ -47,7 +47,7 @@ import ucl.ircflagship2.wsclient.events.Instagram;
  */
 @Stateless
 @LocalBean
-public class InstagramCall {
+public class InstagramCall extends BaseCall {
 
   private Client client;
   private WebTarget webTarget;
@@ -55,19 +55,25 @@ public class InstagramCall {
   @Inject
   private InstagramSettings settings;
 
+  @EJB
+  private ObjectStore objectStore;
+
   @PostConstruct
   public void init() {
-    client = ClientBuilder.newClient();
+
+    client = ClientBuilder.newBuilder()
+            .register(feature)
+            .build();
 
     webTarget = client.target(settings.getBaseUrl())
             .path(settings.getEndpoint());
 
     settings.getParameterMap().entrySet().forEach((Map.Entry<String, String> entry) -> {
-      webTarget.queryParam(entry.getKey(), entry.getValue());
+      webTarget = webTarget.queryParam(entry.getKey(), entry.getValue());
     });
 
     settings.getSignature().ifPresent((String s) -> {
-      webTarget.queryParam(settings.getSignatureKey(), s);
+      webTarget = webTarget.queryParam(settings.getSignatureKey(), s);
     });
 
   }
@@ -78,14 +84,16 @@ public class InstagramCall {
 
     if (response.getStatusInfo() == Response.Status.OK) {
 
-      JsonReader jsonRead = Json.createReader(new StringReader(response.readEntity(String.class)));
-      JsonObject jsonObj = jsonRead.readObject();
+      String entityString = response.readEntity(String.class);
 
-      if (!jsonObj.isEmpty()) {
+      if (!entityString.isEmpty()) {
+        InputStream inputStream = new ByteArrayInputStream(entityString.getBytes());
         // Persist to object store
+        objectStore.save(inputStream, timerLong);
       }
 
     }
+
   }
 
   @PreDestroy

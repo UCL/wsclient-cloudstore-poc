@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Guzman <d.guzman at ucl.ac.uk>.
+ * Copyright 2018 David Guzman <d.guzman at ucl.ac.uk>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.apicall;
+package ucl.ircflagship2.wsclient.persist;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
+import java.io.InputStream;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public class InstagramSettingsTest {
+@Stateless
+@LocalBean
+public class ObjectStore {
 
-  @Test
-  public void testQueryParameters() {
-    System.out.println("testQueryParameters()");
-    String expected = "client_id=fooclient&distance=5000&lat=51.538000&lng=-0.115000";
-    InstagramSettings instance = new InstagramSettings();
-    String actual = instance.queryParameters();
-    assertEquals(expected, actual, "#instance.queryParameters() should return 4 parameters in alphabetical order separated by &");
-  }
+  public void save(InputStream inputStream, Long timestamp) {
 
-  @Test
-  public void testGetSignature() {
-    System.out.println("testGetSignature()");
-    String expected = "7795d30a5104a4ddcbf3e7173f8aaa7b76dc23a13600832e5bb198498043dab2";
-    InstagramSettings instance = new InstagramSettings();
-    String actual = instance.getSignature().get();
-    assertEquals(expected, actual, "#instance.getSignature() should return the right signature based on \"barsecret\" as secret");
   }
 
 }
