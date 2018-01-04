@@ -97,6 +97,8 @@
           <environmentVariables>
             <INSTAGRAM_CLIENT_ID>fooclient</INSTAGRAM_CLIENT_ID>
             <INSTAGRAM_SECRET>barsecret</INSTAGRAM_SECRET>
+            <TWITTER_KEY>xvz1evFS4wEEPTGEFPHBog</TWITTER_KEY>
+            <TWITTER_SECRET>L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg</TWITTER_SECRET>
           </environmentVariables>
         </configuration>
       </plugin>

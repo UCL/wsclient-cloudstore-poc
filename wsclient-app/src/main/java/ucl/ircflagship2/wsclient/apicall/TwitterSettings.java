@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Guzman <d.guzman at ucl.ac.uk>.
+ * Copyright 2018 david.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.util;
+package ucl.ircflagship2.wsclient.apicall;
 
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
+import java.util.Base64;
+import javax.enterprise.context.ApplicationScoped;
+import ucl.ircflagship2.wsclient.util.Converter;
 
 /**
  *
- * @author David Guzman <d.guzman at ucl.ac.uk>
+ * @author david
  */
-public class Converter {
+@ApplicationScoped
+public class TwitterSettings {
 
-  public static Optional<String> timerInfoToString(final Serializable input) {
-    if (input instanceof String) {
-      return Optional.of((String) input);
-    } else {
-      return Optional.empty();
-    }
+  private final String CONSUMER_KEY = System.getenv("TWITTER_KEY");
+  private final String CONSUMER_SECRET = System.getenv("TWITTER_SECRET");
+  private final String bearerCredentials;
+
+  public TwitterSettings() {
+    String encodedKey = Converter.encodeRfc1738(CONSUMER_KEY).get();
+    String encodedSecret = Converter.encodeRfc1738(CONSUMER_SECRET).get();
+    String credentials = encodedKey + ":" + encodedSecret;
+    bearerCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
   }
 
-  public static Optional<String> encodeRfc1738(final String input) {
-    try {
-      return Optional.of(URLEncoder.encode(input, StandardCharsets.UTF_8.name()));
-    } catch (UnsupportedEncodingException ex) {
-      return Optional.empty();
-    }
+  public String getBearerCredentials() {
+    return bearerCredentials;
   }
 
 }

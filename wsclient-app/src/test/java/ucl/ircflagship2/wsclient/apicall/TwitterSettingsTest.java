@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Guzman <d.guzman at ucl.ac.uk>.
+ * Copyright 2018 david.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.util;
+package ucl.ircflagship2.wsclient.apicall;
 
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  *
- * @author David Guzman <d.guzman at ucl.ac.uk>
+ * @author david
  */
-public class Converter {
+public class TwitterSettingsTest {
 
-  public static Optional<String> timerInfoToString(final Serializable input) {
-    if (input instanceof String) {
-      return Optional.of((String) input);
-    } else {
-      return Optional.empty();
-    }
-  }
-
-  public static Optional<String> encodeRfc1738(final String input) {
-    try {
-      return Optional.of(URLEncoder.encode(input, StandardCharsets.UTF_8.name()));
-    } catch (UnsupportedEncodingException ex) {
-      return Optional.empty();
-    }
+  @Test
+  public void testGetBearerCredentials() {
+    System.out.println("testGetBearerCredentials()");
+    String expected = "eHZ6MWV2RlM0d0VFUFRHRUZQSEJvZzpMOHFxOVBaeVJnNmllS0dFS2hab2xHQzB2SldMdzhpRUo4OERSZHlPZw==";
+    TwitterSettings instance = new TwitterSettings();
+    String actual = instance.getBearerCredentials();
+    assertEquals(actual, expected);
   }
 
 }
