@@ -29,30 +29,40 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import ucl.ircflagship2.wsclient.events.Twitter;
+import ucl.ircflagship2.wsclient.persist.CacheKey;
+import ucl.ircflagship2.wsclient.persist.NodeCache;
 import ucl.ircflagship2.wsclient.persist.ObjectStore;
 
 /**
  *
- * @author david
+ * @author David Guzman <d.guzman at ucl.ac.uk>
  */
 @Stateless
 @LocalBean
 public class TwitterCall extends BaseCall {
 
   private Client client;
-  private WebTarget webTarget;
-  private String bearerToken;
   private String authHeader;
+  private Invocation.Builder authBuilder;
+  private Invocation.Builder sampleBuilder;
+  private Form authForm = new Form();
+  private final Jsonb JSONB = JsonbBuilder.create();
 
   @Inject
   private TwitterSettings twitterSettings;
+
+  @EJB
+  private NodeCache nodeCache;
 
   @EJB
   private ObjectStore objectStore;
@@ -60,35 +70,67 @@ public class TwitterCall extends BaseCall {
   @PostConstruct
   public void init() {
 
+    // delete
+    nodeCache.setValue(CacheKey.TWITTER_BEARER_TOKEN, "testBearerToken");
+
     authHeader = "Basic " + twitterSettings.getBearerCredentials();
+
+    authForm = authForm.param("grant_type", "client_credentials");
 
     client = ClientBuilder.newBuilder()
             .register(feature)
             .build();
 
+    authBuilder = client.target(twitterSettings.getBaseUrl())
+            .path(twitterSettings.getOauth2TokenEndpoint())
+            .request(MediaType.APPLICATION_JSON_TYPE)
+            .header("Authorization", authHeader)
+            .header("Content-Type", twitterSettings.getContentTypeHeader());
+
+    sampleBuilder = client.target(twitterSettings.getBaseUrl())
+            .path("/1.1/search/tweets.json")
+            .queryParam("q", "flu")
+            .queryParam("geocode", "51.538000,-0.115000,10mi")
+            .queryParam("include_entities", "false")
+            .queryParam("include_user_entities", "false")
+            .queryParam("until", "2018-01-01")
+            .queryParam("lang", "en")
+            .queryParam("result_type", "recent")
+            .request(MediaType.APPLICATION_JSON_TYPE);
+
   }
 
   public void onEvent(@Observes @Twitter Long timerLong) {
 
+    String token = nodeCache.getValue(CacheKey.TWITTER_BEARER_TOKEN)
+            .orElse("TEST"); // .orElse(obtainBearerToken());
+
+    System.out.println("in public #onEvent() " + token);
+
+    Response response = sampleBuilder.header("Authorization", "Bearer " + token)
+            .get();
+
+    if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+      String entityString = response.readEntity(String.class);
+
+      // convert to InputStream and save to ObjectStore
+      System.out.println(entityString);
+    }
+
   }
 
-  private void obtainBearerToken() {
-    // move to init??
-    webTarget = client.target(twitterSettings.getBaseUrl())
-            .path(twitterSettings.getOauth2TokenEndpoint());
+  private String obtainBearerToken() {
+    Response response = authBuilder.post(Entity.entity(authForm, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-    Invocation.Builder builder = webTarget.queryParam("grant_type", "client_credentials")
-            .request(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
-            .header("Authorization", authHeader)
-            .header("Content-Type", twitterSettings.getContentTypeHeader());
-
-    // this should be the start of the method
-    Response response = builder.get();
-
-    if (response.getStatusInfo() == Response.Status.OK) {
-      // create an entity class to facilitate the extraction of the token
+    if (response.getStatus() == Response.Status.OK.getStatusCode()) {
       String entityString = response.readEntity(String.class);
+      TwitterAuthEntity entity = JSONB.fromJson(entityString, TwitterAuthEntity.class);
+      nodeCache.setValue(CacheKey.TWITTER_BEARER_TOKEN, entity.getAccessToken());
+      return entity.getAccessToken();
+    } else {
+      throw new IllegalStateException("Cannot obtain bearer token from Twitter API");
     }
+
   }
 
 }
