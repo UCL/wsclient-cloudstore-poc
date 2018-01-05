@@ -34,8 +34,11 @@ import ucl.ircflagship2.wsclient.util.Converter;
 @ApplicationScoped
 public class TwitterSettings {
 
+  private final String BASE_URL = "https://api.twitter.com";
+  private final String OAUTH2_TOKEN_ENDPOINT = "/oauth2/token";
   private final String CONSUMER_KEY = System.getenv("TWITTER_KEY");
   private final String CONSUMER_SECRET = System.getenv("TWITTER_SECRET");
+  private final String CONTENT_TYPE_HEADER = "application/x-www-form-urlencoded;charset=UTF-8";
   private final String bearerCredentials;
 
   public TwitterSettings() {
@@ -47,6 +50,18 @@ public class TwitterSettings {
 
   public String getBearerCredentials() {
     return bearerCredentials;
+  }
+
+  public String getBaseUrl() {
+    return BASE_URL;
+  }
+
+  public String getOauth2TokenEndpoint() {
+    return OAUTH2_TOKEN_ENDPOINT;
+  }
+
+  public String getContentTypeHeader() {
+    return CONTENT_TYPE_HEADER;
   }
 
 }
