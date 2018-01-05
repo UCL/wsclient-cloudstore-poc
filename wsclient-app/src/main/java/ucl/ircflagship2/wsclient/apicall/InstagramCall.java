@@ -82,7 +82,7 @@ public class InstagramCall extends BaseCall {
 
     Response response = webTarget.request(MediaType.APPLICATION_JSON).get();
 
-    if (response.getStatusInfo() == Response.Status.OK) {
+    if (response.getStatus() == Response.Status.OK.getStatusCode()) {
 
       String entityString = response.readEntity(String.class);
 
