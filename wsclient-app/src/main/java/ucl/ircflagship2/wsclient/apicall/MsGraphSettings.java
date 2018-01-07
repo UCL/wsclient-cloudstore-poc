@@ -21,13 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.persist;
+package ucl.ircflagship2.wsclient.apicall;
+
+import javax.enterprise.context.ApplicationScoped;
+import ucl.ircflagship2.wsclient.util.Converter;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public enum CacheKey {
-  TWITTER_BEARER_TOKEN,
-  MSGRAPH_REFRESH_TOKEN
+@ApplicationScoped
+public class MsGraphSettings {
+
+  private final String MSGRAPH_REFRESH = System.getenv("MSGRAPH_REFRESH");
+  private final String MSAPP_SECRET = System.getenv("MSAPP_SECRET");
+  private final String MSAPP_ID = System.getenv("MSAPP_ID");
+  private final String AUTH_BASE_URL = "https://login.microsoftonline.com";
+  private final String AUTH_PATH = "/common/oauth2/v2.0/token";
+  private final String REDIRECT_URI = "http://localhost/wsclient";
+  private final String scopes;
+
+  public MsGraphSettings() {
+    scopes = Converter.encodeRfc3986("offline files.read.all files.write.all").get();
+  }
+
+  public String getScopes() {
+    return scopes;
+  }
+
+  public String getAuthBaseUrl() {
+    return AUTH_BASE_URL;
+  }
+
+  public String getAuthPath() {
+    return AUTH_PATH;
+  }
+
+  public String getMsAppId() {
+    return MSAPP_ID;
+  }
+
+  public String getRedirectUri() {
+    return REDIRECT_URI;
+  }
+
+  public String getMsGraphRefresh() {
+    return MSGRAPH_REFRESH;
+  }
+
+  public String getMsAppSecret() {
+    return MSAPP_SECRET;
+  }
+
 }
