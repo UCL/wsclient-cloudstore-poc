@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Guzman <d.guzman at ucl.ac.uk>.
+ * Copyright 2018 David Guzman <d.guzman at ucl.ac.uk>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,45 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.util;
+package ucl.ircflagship2.wsclient.apicall;
 
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public class Converter {
+public class MsGraphSettingsTest {
 
-  public static Optional<String> timerInfoToString(final Serializable input) {
-    if (input instanceof String) {
-      return Optional.of((String) input);
-    } else {
-      return Optional.empty();
-    }
-  }
-
-  public static Optional<String> encodeRfc1738(final String input) {
-    try {
-      return Optional.of(URLEncoder.encode(input, StandardCharsets.UTF_8.name()));
-    } catch (UnsupportedEncodingException ex) {
-      return Optional.empty();
-    }
-  }
-
-  public static Optional<String> encodeRfc3986(final String input) {
-    try {
-      URI uri = new URI(null, input, null);
-      return Optional.of(uri.toASCIIString());
-    } catch (URISyntaxException ex) {
-      return Optional.empty();
-    }
+  @Test
+  public void testGetScopes() {
+    System.out.println("testGetScopes()");
+    MsGraphSettings instance = new MsGraphSettings();
+    String expected = "offline%20files.read.all%20files.write.all";
+    String actual = instance.getScopes();
+    assertEquals(expected, actual);
   }
 
 }
