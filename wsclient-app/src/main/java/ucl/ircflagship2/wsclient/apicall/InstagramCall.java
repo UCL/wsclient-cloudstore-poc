@@ -39,7 +39,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import ucl.ircflagship2.wsclient.events.Instagram;
-import ucl.ircflagship2.wsclient.persist.ObjectStore;
+import ucl.ircflagship2.wsclient.persist.FileStore;
 
 /**
  *
@@ -56,7 +56,7 @@ public class InstagramCall extends BaseCall {
   private InstagramSettings settings;
 
   @EJB
-  private ObjectStore objectStore;
+  private FileStore store;
 
   @PostConstruct
   public void init() {
@@ -88,8 +88,8 @@ public class InstagramCall extends BaseCall {
 
       if (!entityString.isEmpty()) {
         InputStream inputStream = new ByteArrayInputStream(entityString.getBytes());
-        // Persist to object store
-        objectStore.save(inputStream, timerLong);
+        // Persist to file store
+        store.save(inputStream, timerLong);
       }
 
     }
