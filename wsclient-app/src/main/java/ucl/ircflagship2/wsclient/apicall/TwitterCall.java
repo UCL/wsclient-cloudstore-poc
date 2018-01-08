@@ -41,7 +41,7 @@ import javax.ws.rs.core.Response;
 import ucl.ircflagship2.wsclient.events.Twitter;
 import ucl.ircflagship2.wsclient.persist.CacheKey;
 import ucl.ircflagship2.wsclient.persist.NodeCache;
-import ucl.ircflagship2.wsclient.persist.ObjectStore;
+import ucl.ircflagship2.wsclient.persist.FileStore;
 
 /**
  *
@@ -65,7 +65,7 @@ public class TwitterCall extends BaseCall {
   private NodeCache nodeCache;
 
   @EJB
-  private ObjectStore objectStore;
+  private FileStore store;
 
   @PostConstruct
   public void init() {
@@ -113,7 +113,7 @@ public class TwitterCall extends BaseCall {
     if (response.getStatus() == Response.Status.OK.getStatusCode()) {
       String entityString = response.readEntity(String.class);
 
-      // convert to InputStream and save to ObjectStore
+      // convert to InputStream and save to FileStore
       System.out.println(entityString);
     }
 

@@ -33,7 +33,7 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @LocalBean
-public class ObjectStore {
+public class FileStore {
 
   public void save(InputStream inputStream, Long timestamp) {
 
