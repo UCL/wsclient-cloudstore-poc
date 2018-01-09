@@ -23,6 +23,7 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
+import java.time.LocalDate;
 import java.util.Base64;
 import javax.enterprise.context.ApplicationScoped;
 import ucl.ircflagship2.wsclient.util.Converter;
@@ -67,6 +68,12 @@ public class TwitterSettings {
 
   public String getStandardSearchEndpoint() {
     return STANDARD_SEARCH_ENDPOINT;
+  }
+
+  public String calculateUntilDate() {
+    LocalDate today = LocalDate.now();
+    LocalDate aWeekAgo = today.minusDays(6);
+    return aWeekAgo.toString();
   }
 
 }

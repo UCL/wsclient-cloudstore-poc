@@ -35,10 +35,14 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.ResponseProcessingException;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import ucl.ircflagship2.wsclient.persist.CacheKey;
 import ucl.ircflagship2.wsclient.persist.NodeCache;
@@ -53,8 +57,8 @@ public class MsGraphCall extends BaseCall {
 
   private final Client client;
   private Invocation.Builder authBuilder;
+  private WebTarget uploadTarget;
   private Form authForm = new Form();
-  private String accessToken;
   private final Jsonb JSONB = JsonbBuilder.create();
 
   @Inject
@@ -66,6 +70,7 @@ public class MsGraphCall extends BaseCall {
   public MsGraphCall() {
     client = ClientBuilder.newBuilder()
             .register(feature)
+            .register(MultiPartFeature.class)
             .build();
   }
 
@@ -75,7 +80,7 @@ public class MsGraphCall extends BaseCall {
     nodeCache.setValue(CacheKey.MSGRAPH_REFRESH_TOKEN, msGraphSettings.getMsGraphRefresh());
 
     authForm = authForm.param("client_id", msGraphSettings.getMsAppId())
-            .param("scope", msGraphSettings.getScopes())
+            .param("scope", "offline_access files.read.all files.readwrite.all")
             .param("refresh_token", nodeCache.getValue(CacheKey.MSGRAPH_REFRESH_TOKEN).get())
             .param("redirect_uri", msGraphSettings.getRedirectUri())
             .param("grant_type", "refresh_token")
@@ -86,6 +91,9 @@ public class MsGraphCall extends BaseCall {
             .request(MediaType.APPLICATION_JSON_TYPE)
             .header("Content-Type", "application/x-www-form-urlencoded");
 
+    uploadTarget = client.target(msGraphSettings.getMsGraphBaseUrl())
+            .path(msGraphSettings.getUploadPath());
+
   }
 
   public String upload(final File fileToUpload) {
@@ -94,9 +102,23 @@ public class MsGraphCall extends BaseCall {
             fileToUpload,
             MediaType.APPLICATION_OCTET_STREAM_TYPE
     );
-    FormDataMultiPart multiPart = new FormDataMultiPart();
-    multiPart.bodyPart(fileBodyPart);
-    return Response.Status.OK.toString();
+
+    MultiPart multiPart = new FormDataMultiPart()
+            .bodyPart(fileBodyPart);
+
+    Entity fileEntity = Entity.entity(multiPart, multiPart.getMediaType());
+
+    Response response = uploadTarget.resolveTemplate("filename", "graph/" + fileToUpload.getName())
+            .request(MediaType.APPLICATION_JSON_TYPE)
+            .header("Authorization", obtainAccessToken())
+            .put(fileEntity);
+
+    if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+      throw new ResponseProcessingException(response, "Failed to upload to OneDrive");
+    }
+
+    // Return or push a message with the id of the drive item as returned in the response
+    return Response.Status.CREATED.toString();
   }
 
   private String obtainAccessToken() {
@@ -107,15 +129,11 @@ public class MsGraphCall extends BaseCall {
       String entityString = response.readEntity(String.class);
       MsGraphAuthEntity authEntity = JSONB.fromJson(entityString, MsGraphAuthEntity.class);
       nodeCache.setValue(CacheKey.MSGRAPH_REFRESH_TOKEN, authEntity.getRefreshToken());
-      return authEntity.getAccessToken();
+      return "Bearer " + authEntity.getAccessToken();
     } else {
       throw new IllegalStateException("Cannot obtain bearer token from Microsoft Login API");
     }
 
-  }
-
-  private String getBearer() {
-    return "Bearer " + accessToken;
   }
 
 }
