@@ -23,7 +23,13 @@
  */
 package ucl.ircflagship2.wsclient.persist;
 
+import java.io.File;
+import javax.ws.rs.core.Response;
+import mockit.Expectations;
+import mockit.Injectable;
+import mockit.Tested;
 import org.junit.jupiter.api.Test;
+import ucl.ircflagship2.wsclient.apicall.MsGraphCall;
 import ucl.ircflagship2.wsclient.scheduler.ServiceTag;
 
 /**
@@ -32,10 +38,22 @@ import ucl.ircflagship2.wsclient.scheduler.ServiceTag;
  */
 public class FileStoreTest {
 
+  @Tested
+  private FileStore instance;
+
+  @Injectable
+  private MsGraphCall msGraphCall;
+
   @Test
   public void testSave() {
     System.out.println("testSave()");
-    FileStore instance = new FileStore();
+
+    new Expectations() {
+      {
+        msGraphCall.upload((File) any);
+        result = Response.Status.OK.toString();
+      }
+    };
     instance.init();
     instance.save("test", 86489364289L, ServiceTag.TWITTER);
 

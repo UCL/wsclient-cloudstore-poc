@@ -23,6 +23,7 @@
  */
 package ucl.ircflagship2.wsclient.persist;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -90,6 +91,8 @@ public class FileStore {
     }
 
     URI zipUri = createUri("file:%s/%s-%s.zip", tag, timestamp);
+
+    msGraphCall.upload(new File(zipUri));
 
     try {
       Files.delete(Paths.get(zipUri));
