@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Guzman <d.guzman at ucl.ac.uk>.
+ * Copyright 2018 David Guzman <d.guzman at ucl.ac.uk>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.log;
+package ucl.ircflagship2.wsclient.persist;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.Timer;
-import javax.interceptor.AroundTimeout;
-import javax.interceptor.InvocationContext;
+import java.io.File;
+import javax.ws.rs.core.Response;
+import mockit.Expectations;
+import mockit.Injectable;
+import mockit.Tested;
+import org.junit.jupiter.api.Test;
+import ucl.ircflagship2.wsclient.apicall.MsGraphCall;
+import ucl.ircflagship2.wsclient.scheduler.ServiceTag;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public class FireEventInterceptor {
+public class FileStoreTest {
 
-  @AroundTimeout
-  public Object interceptFiring(InvocationContext iCtx) throws Exception {
-    Object obj = iCtx.getTimer();
-    if (obj instanceof Timer) {
-      Timer timer = (Timer) obj;
-      Logger.getLogger("EventLogger").log(Level.INFO, "Calling fireEvent() - {0}", timer.getInfo());
-    }
-    return iCtx.proceed();
+  @Tested
+  private FileStore instance;
+
+  @Injectable
+  private MsGraphCall msGraphCall;
+
+  @Test
+  public void testSave() {
+    System.out.println("testSave()");
+
+    new Expectations() {
+      {
+        msGraphCall.upload((File) any);
+        result = Response.Status.OK.toString();
+      }
+    };
+    instance.init();
+    instance.save("test", 86489364289L, ServiceTag.TWITTER);
+
   }
 
 }

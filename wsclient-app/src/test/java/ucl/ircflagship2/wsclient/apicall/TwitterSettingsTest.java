@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Guzman <d.guzman at ucl.ac.uk>.
+ * Copyright 2018 david.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.log;
+package ucl.ircflagship2.wsclient.apicall;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.Timer;
-import javax.interceptor.AroundTimeout;
-import javax.interceptor.InvocationContext;
+import java.time.LocalDate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  *
- * @author David Guzman <d.guzman at ucl.ac.uk>
+ * @author david
  */
-public class FireEventInterceptor {
+public class TwitterSettingsTest {
 
-  @AroundTimeout
-  public Object interceptFiring(InvocationContext iCtx) throws Exception {
-    Object obj = iCtx.getTimer();
-    if (obj instanceof Timer) {
-      Timer timer = (Timer) obj;
-      Logger.getLogger("EventLogger").log(Level.INFO, "Calling fireEvent() - {0}", timer.getInfo());
-    }
-    return iCtx.proceed();
+  @Test
+  public void testGetBearerCredentials() {
+    System.out.println("testGetBearerCredentials()");
+    String expected = "eHZ6MWV2RlM0d0VFUFRHRUZQSEJvZzpMOHFxOVBaeVJnNmllS0dFS2hab2xHQzB2SldMdzhpRUo4OERSZHlPZw==";
+    TwitterSettings instance = new TwitterSettings();
+    String actual = instance.getBearerCredentials();
+    assertEquals(actual, expected);
+  }
+
+  @Test
+  public void testCalculateStartDate() {
+    System.out.println("testCalculateStartDate()");
+    String expected = LocalDate.now().minusDays(6).toString();
+    TwitterSettings instance = new TwitterSettings();
+    String actual = instance.calculateUntilDate();
+    assertEquals(actual, expected, "Date is " + actual);
+    System.out.println("Date is " + actual);
   }
 
 }

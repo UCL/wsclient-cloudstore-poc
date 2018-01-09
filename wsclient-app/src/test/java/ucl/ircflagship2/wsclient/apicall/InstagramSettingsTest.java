@@ -35,16 +35,16 @@ public class InstagramSettingsTest {
   @Test
   public void testQueryParameters() {
     System.out.println("testQueryParameters()");
-    String expected = "|access_token=footoken&|distance=5000&|lat=51.538000&|lng=-0.115000";
+    String expected = "client_id=fooclient&distance=5000&lat=51.538000&lng=-0.115000";
     InstagramSettings instance = new InstagramSettings();
     String actual = instance.queryParameters();
-    assertEquals(expected, actual, "#instance.queryParameters() should return 4 parameters in alphabetical order separated by | ");
+    assertEquals(expected, actual, "#instance.queryParameters() should return 4 parameters in alphabetical order separated by &");
   }
 
   @Test
   public void testGetSignature() {
     System.out.println("testGetSignature()");
-    String expected = "a4c20ef35ab3fe30cb06efc2b039329bca71971bb765dd5658c084cf55103b0a";
+    String expected = "7795d30a5104a4ddcbf3e7173f8aaa7b76dc23a13600832e5bb198498043dab2";
     InstagramSettings instance = new InstagramSettings();
     String actual = instance.getSignature().get();
     assertEquals(expected, actual, "#instance.getSignature() should return the right signature based on \"barsecret\" as secret");

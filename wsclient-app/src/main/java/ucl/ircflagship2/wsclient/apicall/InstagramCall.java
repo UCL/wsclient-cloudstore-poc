@@ -23,8 +23,12 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.enterprise.event.Observes;
@@ -32,7 +36,10 @@ import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import ucl.ircflagship2.wsclient.events.Instagram;
+import ucl.ircflagship2.wsclient.persist.FileStore;
 
 /**
  *
@@ -40,27 +47,52 @@ import ucl.ircflagship2.wsclient.events.Instagram;
  */
 @Stateless
 @LocalBean
-public class InstagramCall {
+public class InstagramCall extends BaseCall {
 
-  private final String BASE_URL = "https://api.instagram.com/v1";
   private Client client;
+  private WebTarget webTarget;
 
   @Inject
   private InstagramSettings settings;
 
+  @EJB
+  private FileStore store;
+
   @PostConstruct
   public void init() {
-    client = ClientBuilder.newClient();
+
+    client = ClientBuilder.newBuilder()
+            .register(feature)
+            .build();
+
+    webTarget = client.target(settings.getBaseUrl())
+            .path(settings.getEndpoint());
+
+    settings.getParameterMap().entrySet().forEach((Map.Entry<String, String> entry) -> {
+      webTarget = webTarget.queryParam(entry.getKey(), entry.getValue());
+    });
+
+    settings.getSignature().ifPresent((String s) -> {
+      webTarget = webTarget.queryParam(settings.getSignatureKey(), s);
+    });
+
   }
 
   public void onEvent(@Observes @Instagram Long timerLong) {
 
-    WebTarget webTarget = client.target(BASE_URL)
-            .path(settings.getEndpoint());
+    Response response = webTarget.request(MediaType.APPLICATION_JSON).get();
 
-    settings.getSignature().ifPresent((String s) -> {
-      webTarget.queryParam("sig", s);
-    });
+    if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+
+      String entityString = response.readEntity(String.class);
+
+      if (!entityString.isEmpty()) {
+        InputStream inputStream = new ByteArrayInputStream(entityString.getBytes());
+        // Persist to file store
+        store.save(inputStream, timerLong);
+      }
+
+    }
 
   }
 
