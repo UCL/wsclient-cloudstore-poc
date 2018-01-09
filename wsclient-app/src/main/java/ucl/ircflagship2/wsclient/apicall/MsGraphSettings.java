@@ -24,7 +24,6 @@
 package ucl.ircflagship2.wsclient.apicall;
 
 import javax.enterprise.context.ApplicationScoped;
-import ucl.ircflagship2.wsclient.util.Converter;
 
 /**
  *
@@ -38,16 +37,9 @@ public class MsGraphSettings {
   private final String MSAPP_ID = System.getenv("MSAPP_ID");
   private final String AUTH_BASE_URL = "https://login.microsoftonline.com";
   private final String AUTH_PATH = "/common/oauth2/v2.0/token";
+  private final String MSGRAPH_BASE_URL = "https://graph.microsoft.com/v1.0";
+  private final String UPLOAD_PATH = "/me/drive/items/root:/{filename}:/content";
   private final String REDIRECT_URI = "http://localhost/wsclient";
-  private final String scopes;
-
-  public MsGraphSettings() {
-    scopes = Converter.encodeRfc3986("offline files.read.all files.write.all").get();
-  }
-
-  public String getScopes() {
-    return scopes;
-  }
 
   public String getAuthBaseUrl() {
     return AUTH_BASE_URL;
@@ -71,6 +63,14 @@ public class MsGraphSettings {
 
   public String getMsAppSecret() {
     return MSAPP_SECRET;
+  }
+
+  public String getMsGraphBaseUrl() {
+    return MSGRAPH_BASE_URL;
+  }
+
+  public String getUploadPath() {
+    return UPLOAD_PATH;
   }
 
 }

@@ -94,7 +94,7 @@ public class TwitterCall extends BaseCall {
             .queryParam("geocode", "51.538000,-0.115000,10mi")
             .queryParam("include_entities", "false")
             .queryParam("include_user_entities", "false")
-            .queryParam("until", "2018-01-01")
+            .queryParam("until", twitterSettings.calculateUntilDate())
             .queryParam("lang", "en")
             .queryParam("result_type", "recent")
             .request(MediaType.APPLICATION_JSON_TYPE);

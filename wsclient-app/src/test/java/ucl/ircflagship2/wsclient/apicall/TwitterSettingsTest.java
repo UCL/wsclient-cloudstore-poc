@@ -23,6 +23,7 @@
  */
 package ucl.ircflagship2.wsclient.apicall;
 
+import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +40,16 @@ public class TwitterSettingsTest {
     TwitterSettings instance = new TwitterSettings();
     String actual = instance.getBearerCredentials();
     assertEquals(actual, expected);
+  }
+
+  @Test
+  public void testCalculateStartDate() {
+    System.out.println("testCalculateStartDate()");
+    String expected = LocalDate.now().minusDays(6).toString();
+    TwitterSettings instance = new TwitterSettings();
+    String actual = instance.calculateUntilDate();
+    assertEquals(actual, expected, "Date is " + actual);
+    System.out.println("Date is " + actual);
   }
 
 }
