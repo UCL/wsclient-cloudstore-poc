@@ -1,1 +1,1 @@
-= wsclient-s3-poc
+= wsclient-cloudstore-poc

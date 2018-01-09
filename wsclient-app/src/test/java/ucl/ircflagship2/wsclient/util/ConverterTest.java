@@ -49,4 +49,14 @@ public class ConverterTest {
     assertEquals(expected, actual, "Converter.timerInfoToString(serialStr) should return Optional.of(\"INSTAGRAM\")");
   }
 
+  @Test
+  public void testEncodeRfc1738() {
+    System.out.println("testEncodeRfc1738()");
+    String expectedString = "L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg";
+    String inputString = "L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg";
+    Optional<String> actual = Converter.encodeRfc1738(inputString);
+    Optional<String> expected = Converter.encodeRfc1738(expectedString);
+    assertEquals(expected, actual, "Converter.encodeRfc1738(inputStr) should not change String");
+  }
+
 }

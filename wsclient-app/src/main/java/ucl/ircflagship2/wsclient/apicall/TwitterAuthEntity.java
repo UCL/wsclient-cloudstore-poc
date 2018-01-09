@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Guzman <d.guzman at ucl.ac.uk>.
+ * Copyright 2018 David Guzman <d.guzman at ucl.ac.uk>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.log;
+package ucl.ircflagship2.wsclient.apicall;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.Timer;
-import javax.interceptor.AroundTimeout;
-import javax.interceptor.InvocationContext;
+import javax.json.bind.annotation.JsonbProperty;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public class FireEventInterceptor {
+public class TwitterAuthEntity {
 
-  @AroundTimeout
-  public Object interceptFiring(InvocationContext iCtx) throws Exception {
-    Object obj = iCtx.getTimer();
-    if (obj instanceof Timer) {
-      Timer timer = (Timer) obj;
-      Logger.getLogger("EventLogger").log(Level.INFO, "Calling fireEvent() - {0}", timer.getInfo());
-    }
-    return iCtx.proceed();
+  @JsonbProperty("token_type")
+  private String tokenType;
+
+  @JsonbProperty("access_token")
+  private String accessToken;
+
+  /**
+   * @return the tokenType
+   */
+  public String getTokenType() {
+    return tokenType;
+  }
+
+  /**
+   * @param tokenType the tokenType to set
+   */
+  public void setTokenType(String tokenType) {
+    this.tokenType = tokenType;
+  }
+
+  /**
+   * @return the accessToken
+   */
+  public String getAccessToken() {
+    return accessToken;
+  }
+
+  /**
+   * @param accessToken the accessToken to set
+   */
+  public void setAccessToken(String accessToken) {
+    this.accessToken = accessToken;
   }
 
 }

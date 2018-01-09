@@ -22,3 +22,6 @@ nbdist/
 # Glassfish
 derby.log
 /wsclient-app/nbproject/
+
+# Heroku
+.env

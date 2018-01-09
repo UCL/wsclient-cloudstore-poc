@@ -4,7 +4,7 @@
 
   <parent>
     <groupId>ucl.ircflagship2</groupId>
-    <artifactId>wsclient-s3-poc</artifactId>
+    <artifactId>wsclient-cloudstore-poc</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
@@ -15,14 +15,24 @@
 
   <properties>
     <dep.javaeeapi.version>7.0</dep.javaeeapi.version>
+    <dep.jmockit.version>1.38</dep.jmockit.version>
     <dep.junit.version>5.0.2</dep.junit.version>
     <dep.junit-surefire.version>1.0.2</dep.junit-surefire.version>
+    <dep.javaxwsapi.version>2.1</dep.javaxwsapi.version>
+    <dep.jersey.version>2.26</dep.jersey.version>
+    <dep.json.version>1.1</dep.json.version>
     <plu.ejb.version>2.3</plu.ejb.version>
     <plu.surefire.version>2.19.1</plu.surefire.version>
     <conf.ejbVersion>3.2</conf.ejbVersion>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.jmockit</groupId>
+      <artifactId>jmockit</artifactId>
+      <version>${dep.jmockit.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
@@ -33,6 +43,54 @@
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <version>${dep.javaeeapi.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>${dep.javaxwsapi.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${dep.jersey.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.inject</groupId>
+      <artifactId>jersey-hk2</artifactId>
+      <version>${dep.jersey.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-common</artifactId>
+      <version>${dep.jersey.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-multipart</artifactId>
+      <version>${dep.jersey.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.json</groupId>
+      <artifactId>javax.json-api</artifactId>
+      <version>${dep.json.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.json</artifactId>
+      <version>${dep.json.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>yasson</artifactId>
+      <version>1.0</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -52,8 +110,10 @@
         </dependencies>
         <configuration>
           <environmentVariables>
-            <INSTAGRAM_ACCESS_TOKEN>footoken</INSTAGRAM_ACCESS_TOKEN>
+            <INSTAGRAM_CLIENT_ID>fooclient</INSTAGRAM_CLIENT_ID>
             <INSTAGRAM_SECRET>barsecret</INSTAGRAM_SECRET>
+            <TWITTER_KEY>xvz1evFS4wEEPTGEFPHBog</TWITTER_KEY>
+            <TWITTER_SECRET>L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg</TWITTER_SECRET>
           </environmentVariables>
         </configuration>
       </plugin>

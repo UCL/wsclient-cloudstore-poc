@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Guzman <d.guzman at ucl.ac.uk>.
+ * Copyright 2018 David Guzman <d.guzman at ucl.ac.uk>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ucl.ircflagship2.wsclient.log;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.Timer;
-import javax.interceptor.AroundTimeout;
-import javax.interceptor.InvocationContext;
+package ucl.ircflagship2.wsclient.persist;
 
 /**
  *
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
-public class FireEventInterceptor {
-
-  @AroundTimeout
-  public Object interceptFiring(InvocationContext iCtx) throws Exception {
-    Object obj = iCtx.getTimer();
-    if (obj instanceof Timer) {
-      Timer timer = (Timer) obj;
-      Logger.getLogger("EventLogger").log(Level.INFO, "Calling fireEvent() - {0}", timer.getInfo());
-    }
-    return iCtx.proceed();
-  }
-
+public enum CacheKey {
+  TWITTER_BEARER_TOKEN,
+  MSGRAPH_REFRESH_TOKEN
 }
