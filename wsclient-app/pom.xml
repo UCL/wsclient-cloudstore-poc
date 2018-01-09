@@ -4,7 +4,7 @@
 
   <parent>
     <groupId>ucl.ircflagship2</groupId>
-    <artifactId>wsclient-s3-poc</artifactId>
+    <artifactId>wsclient-cloudstore-poc</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
@@ -20,6 +20,7 @@
     <dep.junit-surefire.version>1.0.2</dep.junit-surefire.version>
     <dep.javaxwsapi.version>2.1</dep.javaxwsapi.version>
     <dep.jersey.version>2.26</dep.jersey.version>
+    <dep.json.version>1.1</dep.json.version>
     <plu.ejb.version>2.3</plu.ejb.version>
     <plu.surefire.version>2.19.1</plu.surefire.version>
     <conf.ejbVersion>3.2</conf.ejbVersion>
@@ -77,17 +78,20 @@
     <dependency>
       <groupId>javax.json</groupId>
       <artifactId>javax.json-api</artifactId>
-      <version>1.1</version>
+      <version>${dep.json.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.json</artifactId>
-      <version>1.1</version>
+      <version>${dep.json.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse</groupId>
       <artifactId>yasson</artifactId>
       <version>1.0</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 

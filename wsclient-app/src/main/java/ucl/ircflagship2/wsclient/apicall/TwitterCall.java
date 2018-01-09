@@ -42,6 +42,7 @@ import ucl.ircflagship2.wsclient.events.Twitter;
 import ucl.ircflagship2.wsclient.persist.CacheKey;
 import ucl.ircflagship2.wsclient.persist.NodeCache;
 import ucl.ircflagship2.wsclient.persist.FileStore;
+import ucl.ircflagship2.wsclient.scheduler.ServiceTag;
 
 /**
  *
@@ -113,8 +114,8 @@ public class TwitterCall extends BaseCall {
     if (response.getStatus() == Response.Status.OK.getStatusCode()) {
       String entityString = response.readEntity(String.class);
 
-      // convert to InputStream and save to FileStore
-      System.out.println(entityString);
+      // Parse JSON to validate
+      store.save(entityString, timerLong, ServiceTag.TWITTER);
     }
 
   }
