@@ -89,7 +89,11 @@ public class MsGraphCall extends BaseCall {
   }
 
   public String upload(final File fileToUpload) {
-    FileDataBodyPart fileBodyPart = new FileDataBodyPart("file", fileToUpload, MediaType.APPLICATION_OCTET_STREAM_TYPE);
+    FileDataBodyPart fileBodyPart = new FileDataBodyPart(
+            "file",
+            fileToUpload,
+            MediaType.APPLICATION_OCTET_STREAM_TYPE
+    );
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(fileBodyPart);
     return Response.Status.OK.toString();
