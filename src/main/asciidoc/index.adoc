@@ -6,7 +6,7 @@ David Guzman <https://github.com/david-guzman[@david-guzman]>
 :toc: macro
 :toc-title: Contents
 
-Java EE Timer-based JAX-RS client to cloud file store application to facilitate analysis of text content obtained from APIs (proof of concept) 
+Java EE Timer-based JAX-RS client to cloud file store application to facilitate analysis of text content obtained from APIs (proof of concept)
 
 .DRAFT
 ****

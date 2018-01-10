@@ -57,9 +57,11 @@
           <backend>html5</backend>
           <outputDirectory>docs</outputDirectory>
           <preserveDirectories>true</preserveDirectories>
+          <embedAssets>true</embedAssets>
           <attributes>
             <project-version>${project.version}</project-version>
             <sectnums>true</sectnums>
+            <stylesheet>github.css</stylesheet>
           </attributes>
         </configuration>
         <executions>
