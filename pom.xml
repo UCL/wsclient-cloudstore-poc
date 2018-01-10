@@ -17,6 +17,8 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <plu.tidy.version>1.1.0</plu.tidy.version>
+    <plu.asciidoctor.version>1.5.6</plu.asciidoctor.version>
+    <plu.clean.version>3.0.0</plu.clean.version>
   </properties>
 
   <build>
@@ -31,6 +33,41 @@
             <phase>validate</phase>
             <goals>
               <goal>pom</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>${plu.clean.version}</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>docs</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>${plu.asciidoctor.version}</version>
+        <configuration>
+          <backend>html5</backend>
+          <outputDirectory>docs</outputDirectory>
+          <preserveDirectories>true</preserveDirectories>
+          <attributes>
+            <project-version>${project.version}</project-version>
+            <sectnums>true</sectnums>
+          </attributes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
             </goals>
           </execution>
         </executions>
