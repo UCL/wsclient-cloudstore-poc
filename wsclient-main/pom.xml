@@ -14,7 +14,7 @@
   <properties>
     <dep.glassfish.version>5.0</dep.glassfish.version>
     <plu.appassembler.version>2.0.0</plu.appassembler.version>
-    <conf.appassembler.repo>${project.build.directory}/app/repo</conf.appassembler.repo>
+    <conf.appassembler.repo>${project.name}/target/app/repo</conf.appassembler.repo>
     <conf.appassembler.appname>wsclient-app</conf.appassembler.appname>
   </properties>
 
@@ -46,7 +46,7 @@
           </execution>
         </executions>
         <configuration>
-          <assembleDirectory>${project.build.directory}/app</assembleDirectory>
+          <assembleDirectory>target/app</assembleDirectory>
           <programs>
             <program>
               <mainClass>ucl.ircflagship2.wsclient.main.DeployOnGlassfish</mainClass>
