@@ -1,1 +1,9 @@
 = wsclient-cloudstore-poc
+
+A Java EE Timer-controlled JAX-RS client to cloud file store application to facilitate analysis of text content obtained from APIs (proof of concept).
+
+[horizontal]
+.Build Status
+Master:: image:https://travis-ci.org/UCL/wsclient-cloudstore-poc.svg?branch=master["Build Status", link="https://travis-ci.org/UCL/wsclient-cloudstore-poc"]
+
+Devel:: image:https://travis-ci.org/UCL/wsclient-cloudstore-poc.svg?branch=devel["Build Status", link="https://travis-ci.org/UCL/wsclient-cloudstore-poc"]
