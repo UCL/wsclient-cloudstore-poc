@@ -16,6 +16,9 @@ Master:: image:https://travis-ci.org/UCL/wsclient-cloudstore-poc.svg?branch=mast
 
 Devel:: image:https://travis-ci.org/UCL/wsclient-cloudstore-poc.svg?branch=devel["Build Status", link="https://travis-ci.org/UCL/wsclient-cloudstore-poc"]
 
+.Technical Documentation
+http://github-pages.ucl.ac.uk/wsclient-cloudstore-poc/
+
 toc::[]
 
 == Installation
