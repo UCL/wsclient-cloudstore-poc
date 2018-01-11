@@ -6,7 +6,9 @@ David Guzman <https://github.com/david-guzman[@david-guzman]>
 :toc: macro
 :toc-title: Contents
 
-Java EE Timer-based JAX-RS client to cloud file store application to facilitate analysis of text content obtained from APIs (proof of concept)
+Java EE Timer-based JAX-RS client to cloud file store application to facilitate analysis of text content obtained from APIs (proof of concept).
+
+*Source code:* https://github.com/UCL/wsclient-cloudstore-poc
 
 .DRAFT
 ****
@@ -16,12 +18,62 @@ These recommendations are subject to change.
 
 toc::[]
 
-// = Background
+== Background
+
+=== Context
+
+=== Objectives
+
+=== Resources and platforms
+
+
+== Core components
 
 == Public APIs
 
-== PaaS
+== PaaS - Heroku
 
-// = Architecture
+== UCL Office365 OneDrive
 
-== Components
+== Data flow
+
+[plantuml, diagram-classes, svg]
+....
+cloud "Internet" {
+    [Twitter API] -- GET
+    GET --> [wsclient-cloudstore-app]
+    [wsclient-cloudstore-app] --> PUT
+    PUT -- [UCL Office365 OneDrive]
+}
+
+note right of [wsclient-cloudstore-app]
+    Calls Twitter Search API
+    Package and compress JSON in a ZIP file
+    Push the ZIP file to OneDrive
+end note
+
+frame "CS UCL" {
+    [UCL Office365 OneDrive] ..> API
+    API -- [clientapp1]
+    API -- [clientapp2]
+    API -- [clientappn]
+    
+    [clientapp1] --> [data processor]
+    [clientapp2] --> [data processor]
+    [clientappn] --> [data processor]
+    
+    folder "storage" {
+        [data processor] --> [objectstore]
+        [data processor] --> [database]
+        [data processor] --> [filestore]
+        
+    }
+}
+
+note right of API
+    Python API
+end note
+....
+
+
+== Future features
