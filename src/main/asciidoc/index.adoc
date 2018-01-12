@@ -36,47 +36,74 @@ toc::[]
 
 === wsclient-app
 
+The `wsclient-app` application is an EJB module based in Java EE 8 technologies (Glassfish 5):
+
+* EJB Timer
+* CDI events
+* JSONB and JSONP
+* JAXRS client (NB: at moment it is implemented using Jersey-specific features)
+
+The business logic should be transactional in design and must carry out the following tasks:
+
+. Download JSON data from public REST endpoints such as Twitter Search API
+. Package the serialised JSON data in a temporary compressed ZIP file
+. Upload to UCL OneDrive using a MS Graph REST endpoint
+
+The process is orchestrated by an EJB Timer using CDI events.
+
 [plantuml, wsclient-sequence, svg]
 ....
 box "wsclient-app"
 control CallTimer <<Singleton EJB>>
-control TimerService <<Container Resource>>
 control TwitterCall <<Stateless EJB>>
 control FileStore <<Stateless EJB>>
 control MsGraphCall <<Stateless EJB>>
 end box
 collections PubAPIs as "Public APIs" <<HTTP Resource>>
 
-CallTimer -> TimerService: @PostConstruct start timer
+CallTimer -> CallTimer : @PostConstruct start timer
 activate CallTimer
-activate TimerService
 
-TimerService --> TwitterCall: @Timeout fire event
+CallTimer --> TwitterCall: @Timeout fire event
+activate CallTimer
 activate TwitterCall
-TimerService -> TimerService: next @Timeout
-deactivate TimerService
+CallTimer -> CallTimer: next @Timeout
+deactivate CallTimer
 
 TwitterCall ->] : <<Request>>
 ref over PubAPIs: Twitter API
 TwitterCall <-] : <<Response>>
-TwitterCall -> FileStore : store JSON
+TwitterCall -> FileStore : store serialised JSON
 activate FileStore
 
 FileStore -> FileStore : create ZIP file
 activate FileStore
-FileStore -> MsGraphCall : upload
+FileStore -> MsGraphCall : upload ZIP file
 activate MsGraphCall
 MsGraphCall ->] : <<Request>>
 ref over PubAPIs: MS Graph API
 MsGraphCall <-] : <<Response>>
 deactivate MsGraphCall
-deactivate FileStore
 FileStore -> FileStore : delete ZIP file
+deactivate FileStore
 deactivate FileStore
 deactivate TwitterCall
 ....
 
 === wsclient-main
+
+The `wsclient-main` module allows the deployment of `wsclient-app` in environments where a Java EE 8 server is not available. `wsclient-main` uses Glassfish 5 embedded to run `wsclient-app`. The build process generates a shell script that can be used to configure and run the application in standalone mode in Glassfish embedded.
+
+....
+sh wsclient-main/target/app/bin/glassfish5
+....
+
+This script allows the deployment of `wsclient-app` in Heroku as a worker dyno, as defined in the `Procfile`:
+
+....
+worker: sh wsclient-main/target/app/bin/glassfish5
+....
+
 
 == Data flow
 
