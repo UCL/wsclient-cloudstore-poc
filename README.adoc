@@ -23,7 +23,7 @@ http://github-pages.ucl.ac.uk/wsclient-cloudstore-poc/
 
 toc::[]
 
-== Installation
+== Build instructions
 
 === Requirements
 - JDK 8

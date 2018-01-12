@@ -1,7 +1,7 @@
 = wsclient-cloudstore-poc
 David Guzman <https://github.com/david-guzman[@david-guzman]>
 :revnumber: {project-version}
-:revdate: 10.01.2018
+:revdate: 12.01.2018
 :revremark: First draft
 :toc: macro
 :toc-title: Contents
@@ -26,9 +26,56 @@ toc::[]
 
 === Resources and platforms
 
-==== Public APIs
+==== Data sources
+
+This proof-of-concept application is designed to retrieve JSON data from a REST endpoint such as Twitter and Instagram APIs.
+
+IMPORTANT: This implementation does not support the use of "Streaming" APIs.
 
 ==== PaaS - Heroku
+
+While the `wsclient-app` module can be deployed in an existing installation of a Java EE 8 server like Glassfieh 5. This proof-of-concept
+uses the public PaaS https://www.heroku.com/[Heroku]
+
+Heroku uses `dynos`, lightweight Linuz application containers pre-configured for specific process types. The free account allows 1 worker/1 web process types.
+This proof-of-concept uses a worker `dyno`.
+
+For more information on Heroku https://devcenter.heroku.com/articles/how-heroku-works
+
+Heroku allows the deployment of applications from sources in an existing Github repository. With its CLI, the process would be
+
+....
+heroku login
+git clone git@github.com:UCL/wsclient-cloudstore-poc.git
+cd wsclient-cloudstore-poc
+heroku create wsclient-cloudstore-poc-ly4y5z
+....
+
+The last command will create an instance on Heroku with its own Git repository, which is added as a remote to the user:
+
+....
+$ git remote -v
+heroku	https://git.heroku.com/wsclient-cloudstore-poc-ly4y5z.git (fetch)
+heroku	https://git.heroku.com/wsclient-cloudstore-poc-ly4y5z.git (push)
+origin	git@github.com:UCL/wsclient-cloudstore-poc.git (fetch)
+origin	git@github.com:UCL/wsclient-cloudstore-poc.git (push)
+....
+
+Deployment of the application is done with:
+....
+heroku push heroku master
+....
+
+This instructs Heroku to build the application using Maven, unless Maven Wrapper is detected, in which case `mvnw` will be used instead.
+
+.OpenShift
+****
+In addition to Heroku, OpenShift is another PaaS system that should be considered. OpenShift is a RedHat product
+based on Docker and Kubernetes available in 3 configurations: hosted (online), dedicated (public cloud) and on-premise. This last option could be worth
+exploring for a local installation within CS UCL.
+
+For more information on OpenShirt https://www.openshift.com/
+****
 
 ==== UCL Office365 OneDrive
 
@@ -43,13 +90,18 @@ The `wsclient-app` application is an EJB module based in Java EE 8 technologies 
 * JSONB and JSONP
 * JAXRS client (NB: at moment it is implemented using Jersey-specific features)
 
-The business logic should be transactional in design and must carry out the following tasks:
+==== Business logic
+
+The complete process should be transactional and must complete the following tasks:
 
 . Download JSON data from public REST endpoints such as Twitter Search API
 . Package the serialised JSON data in a temporary compressed ZIP file
 . Upload to UCL OneDrive using a MS Graph REST endpoint
 
-The process is orchestrated by an EJB Timer using CDI events.
+The process is orchestrated by the EJB Timer service. In this proof of concept, the interval to use is of 1 hour.
+Once the timeout has been reached, a CDI event with a qualifier specific to a REST client is fired.
+
+The complete process is represented in the following sequence diagram:
 
 [plantuml, wsclient-sequence, svg]
 ....
@@ -90,6 +142,22 @@ deactivate FileStore
 deactivate TwitterCall
 ....
 
+Since the source endpoint is queried to return data for a specific day, the application could could store in a 
+cache object a flag to indicate when the transaction has been completed successfully to prevent the REST client to 
+call the source endpoint repeatedly every hour. This is represented in the following activity diagram:
+
+[plantuml, control-iterations, svg]
+....
+(*) --> "@Observes timed event\n extract date from event info"
+if "Date in event equals date in cache?" then
+--> [false] "Call remote REST endpoint"
+--> "Package and compress in ZIP"
+--> "Upload to UCL OneDrive"
+if "MS Graph API returns 501?" then
+--> [true] "Store date in cache"
+endif
+....
+
 === wsclient-main
 
 The `wsclient-main` module allows the deployment of `wsclient-app` in environments where a Java EE 8 server is not available. `wsclient-main` uses Glassfish 5 embedded to run `wsclient-app`. The build process generates a shell script that can be used to configure and run the application in standalone mode in Glassfish embedded.
@@ -104,6 +172,15 @@ This script allows the deployment of `wsclient-app` in Heroku as a worker dyno, 
 worker: sh wsclient-main/target/app/bin/glassfish5
 ....
 
+== Data model
+
+=== Query parameters
+
+==== Query terms
+
+==== Location
+
+=== JSON object
 
 == Data flow
 
