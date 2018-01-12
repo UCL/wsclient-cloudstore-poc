@@ -252,7 +252,20 @@ provided it falls within the 7-day window. This is done with the `until` query p
 
 === JSON object
 
+Here's an example of the structure of the JSON response provided by Twitter Standard search API:
+
+++++
+<script src="https://gist.github.com/david-guzman/0f22a9855c30678ed021cf5fae1df214.js"></script>
+++++
+
+TIP: It could be beneficial to filter out elements such as `user` from the JSON response before serialising and uploading to OneDrive. This will help reduce the size of the files.
+
 == Data flow
+
+The following diagram shows the overall flow of data and boundaries of components deployed in the cloud and components within CS UCL. If the cloud components help with the data collection 
+and processing, the next step would be to develop an API (in Python) to download files from OneDrive that can be used by members of the team.
+
+Along with a database, it would be beneficial to explore object storage for archival, instead of the current file storage.
 
 [plantuml, dataflow, svg]
 ....
