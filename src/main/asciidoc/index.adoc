@@ -68,16 +68,31 @@ heroku push heroku master
 
 This instructs Heroku to build the application using Maven, unless Maven Wrapper is detected, in which case `mvnw` will be used instead.
 
-.OpenShift
+It is possible to run the application with Heroku locally, for testing before pushing to the `heroku` remote:
+
+....
+heroku local
+....
+
+.OPENSHIFT
 ****
 In addition to Heroku, OpenShift is another PaaS system that should be considered. OpenShift is a RedHat product
 based on Docker and Kubernetes available in 3 configurations: hosted (online), dedicated (public cloud) and on-premise. This last option could be worth
 exploring for a local installation within CS UCL.
 
-For more information on OpenShirt https://www.openshift.com/
+For more information on OpenShift https://www.openshift.com/
 ****
 
 ==== UCL Office365 OneDrive
+
+== Constraints
+
+When using Heroku with a free account, the application must run in the following environment:
+
+* RAM 512MB
+* Compressed size of application sources 500MB
+* Compilation limited to 15 min
+* 1 worker/1 web max
 
 == Core components
 
