@@ -26,4 +26,6 @@ derby.log
 # Heroku
 .env
 
+# Asciidoc documentation for Github Pages
 .asciidoctor
+src/main/asciidoc/img
