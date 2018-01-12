@@ -85,6 +85,29 @@ For more information on OpenShift https://www.openshift.com/
 
 ==== UCL Office365 OneDrive
 
+Cloud-based Office 365 suite used by UCL includes OneDrive which can be accessed through a REST API. This API is part of the Microsoft Graph, a common API 
+for Microsoft resources.
+
+The endpoint used in this proof-of-concept application is:
+
+----
+PUT /me/drive/items/{parent-id}:/{filename}:/content
+----
+
+where `{parent-id}` could point to the personal drive `root` or a shared drive.
+
+A successful upload (PUT request) returns a 201 HTTP code (created).
+
+For more information on OneDrive API: https://docs.microsoft.com/en-gb/onedrive/developer/
+
+.AZURE
+****
+Microsoft also offers storage as part of the range of Azure products. As with Google Cloud and Amazon AWS it offers a range of cloud computing tools and resources that 
+would go beyond the scope of this proof-of-concept application.
+
+For more information on storage options in Azure https://azure.microsoft.com/en-gb/services/storage/
+****
+
 == Constraints
 
 When using Heroku with a free account, the application must run in the following environment:
@@ -168,7 +191,7 @@ if "Date in event equals date in cache?" then
 --> [false] "Call remote REST endpoint"
 --> "Package and compress in ZIP"
 --> "Upload to UCL OneDrive"
-if "MS Graph API returns 501?" then
+if "MS Graph API returns 201?" then
 --> [true] "Store date in cache"
 endif
 ....
