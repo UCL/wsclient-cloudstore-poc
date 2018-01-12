@@ -22,7 +22,17 @@ toc::[]
 
 === Context
 
+Currently, the data collection relies on physical and virtual infrastructure provided by CS UCL. These are Linux machines
+where components for monitoring and logging are custom-made or missing. Also, some of the business logic relies on CRON tasks.
+Given the variety of cloud-based resources and platforms available, this proof-of-concept implements a very simple process: 
+retrieve periodically JSON data from a public REST API to save it in some cloud storage facility with the business logic carried
+out completely by the application.
+
 === Objectives
+
+* Develop a deployable artifact as a proof-of-concept of data collection on the cloud
+* The application should run on PaaS, IaaS such a cloud server or locally on one of the servers in CS UCL
+* The application must be configurable to allow users to use their own credentials
 
 == Resources and platforms
 
