@@ -24,15 +24,25 @@ toc::[]
 
 === Objectives
 
-=== Resources and platforms
+== Resources and platforms
 
-==== Data sources
+=== Data sources - Twitter API
 
 This proof-of-concept application is designed to retrieve JSON data from a REST endpoint such as Twitter and Instagram APIs.
 
 IMPORTANT: This implementation does not support the use of "Streaming" APIs.
 
-==== PaaS - Heroku
+Twitter's standard search API is used by the application. While not meant to be an exhaustive source of tweets, it still offers a combination 
+of search terms and operators that can be combined with geolocation parameters and language, as well as date limits within the last 7-day range.
+This would allow to run a query to extract the tweets created in one specific date.
+
+Resource URL:: https://api.twitter.com/1.1/search/tweets.json
+
+For more information on Twitter Standard search API: 
+
+https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets
+
+=== PaaS - Heroku
 
 While the `wsclient-app` module can be deployed in an existing installation of a Java EE 8 server like Glassfieh 5. This proof-of-concept
 uses the public PaaS https://www.heroku.com/[Heroku]
@@ -83,7 +93,7 @@ exploring for a local installation within CS UCL.
 For more information on OpenShift https://www.openshift.com/
 ****
 
-==== UCL Office365 OneDrive
+=== UCL Office365 OneDrive
 
 Cloud-based Office 365 suite used by UCL includes OneDrive which can be accessed through a REST API. This API is part of the Microsoft Graph, a common API 
 for Microsoft resources.
@@ -214,9 +224,31 @@ worker: sh wsclient-main/target/app/bin/glassfish5
 
 === Query parameters
 
+The application uses the following base parameters to call Twitter Standard search API endpoint + 
+`/1.1/search/tweets.json`:
+
+[horizontal]
+result_type:: recent
+lang:: en
+include_entities:: false
+include_user_entities:: false
+
 ==== Query terms
 
+At the moment the application is configured to search for the word "flu". This query string can be refined by adding more words and operators to a maximum of 500 characters including operators.
+
+NOTE: Information on standard search operators is available at + 
+https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators
+
 ==== Location
+
+The application is set to the geocode of the https://www.metoffice.gov.uk/public/weather/forecast/gcpvjttwz[Met Office station in Islington] with a 10mi radius. This would allow the option to add 
+other geolocated datasets in the future, such as the Met Office's.
+
+==== Time frame
+
+Twitter Standard search API allows access to tweets created in the last 7 days. This limit can be used as a start date for queries, allowing the application to retrieve JSON data for a specific date, 
+provided it falls within the 7-day window. This is done with the `until` query parameter.
 
 === JSON object
 
