@@ -307,3 +307,9 @@ end note
 
 
 == Future features
+
+Open to discussion:
+
+* Configuration of query parameters, tokens and OneDrive id via ejb-jar.xml
+* Configure logging system to send messages/notifications to a server within UCL CS. Alternatively, Outlook API could potentially be used to send email notifications.
+* Python API to download files from OneDrive
