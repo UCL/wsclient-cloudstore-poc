@@ -6,6 +6,7 @@
 
 ifdef::env-github[]
 :important-caption: :heavy_exclamation_mark:
+:note-caption: :information_source:
 endif::[]
 
 A Java EE Timer-controlled JAX-RS client to cloud file store application to facilitate analysis of text content obtained from APIs (proof of concept).
@@ -16,6 +17,7 @@ Master:: image:https://travis-ci.org/UCL/wsclient-cloudstore-poc.svg?branch=mast
 
 Devel:: image:https://travis-ci.org/UCL/wsclient-cloudstore-poc.svg?branch=devel["Build Status", link="https://travis-ci.org/UCL/wsclient-cloudstore-poc"]
 
+[NOTE]
 .Technical Documentation
 http://github-pages.ucl.ac.uk/wsclient-cloudstore-poc/
 
@@ -26,6 +28,7 @@ toc::[]
 .Requirements
 - JDK 8
 - Optional: A Java EE 8 server (full profile) https://javaee.github.io/glassfish/download
+- Graphviz (for documentation in `src/main/asciidoc`)
 
 ....
 git clone git@github.com:UCL/wsclient-cloudstore-poc.git

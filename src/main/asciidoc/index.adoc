@@ -26,18 +26,61 @@ toc::[]
 
 === Resources and platforms
 
+==== Public APIs
+
+==== PaaS - Heroku
+
+==== UCL Office365 OneDrive
 
 == Core components
 
-== Public APIs
+=== wsclient-app
 
-== PaaS - Heroku
+[plantuml, wsclient-sequence, svg]
+....
+box "wsclient-app"
+control CallTimer <<Singleton EJB>>
+control TimerService <<Container Resource>>
+control TwitterCall <<Stateless EJB>>
+control FileStore <<Stateless EJB>>
+control MsGraphCall <<Stateless EJB>>
+end box
+collections PubAPIs as "Public APIs" <<HTTP Resource>>
 
-== UCL Office365 OneDrive
+CallTimer -> TimerService: @PostConstruct start timer
+activate CallTimer
+activate TimerService
+
+TimerService --> TwitterCall: @Timeout fire event
+activate TwitterCall
+TimerService -> TimerService: next @Timeout
+deactivate TimerService
+
+TwitterCall ->] : <<Request>>
+ref over PubAPIs: Twitter API
+TwitterCall <-] : <<Response>>
+TwitterCall -> FileStore : store JSON
+activate FileStore
+
+FileStore -> FileStore : create ZIP file
+activate FileStore
+FileStore -> MsGraphCall : upload
+activate MsGraphCall
+MsGraphCall ->] : <<Request>>
+ref over PubAPIs: MS Graph API
+MsGraphCall <-] : <<Response>>
+deactivate MsGraphCall
+deactivate FileStore
+FileStore -> FileStore : delete ZIP file
+deactivate FileStore
+deactivate TwitterCall
+....
+
+=== wsclient-main
 
 == Data flow
 
-[plantuml, diagram-classes, svg]
+[plantuml, dataflow, svg]
 ....
 cloud "Internet" {
     [Twitter API] -- GET
