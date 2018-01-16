@@ -72,6 +72,7 @@ public class NodeCache {
     String code = concatenate(serviceTag, timestamp);
     if (!transactionCache.contains(code)) {
       transactionCache.add(code);
+      System.out.println("Add transaction code " + code);
       return (true);
     } else {
       return (false);

@@ -100,6 +100,10 @@ public class TwitterCall extends BaseCall {
 
   public void onEvent(@Observes @Twitter Long timerLong) {
 
+    if (nodeCache.hasTransactionCode(ServiceTag.TWITTER, timerLong)) {
+      return;
+    }
+
     String token = nodeCache.getValue(CacheKey.TWITTER_BEARER_TOKEN)
             .orElse(obtainBearerToken());
 

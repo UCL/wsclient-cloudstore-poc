@@ -57,6 +57,9 @@ public class FileStore {
   @EJB
   private MsGraphCall msGraphCall;
 
+  @EJB
+  private NodeCache nodeCache;
+
   @PostConstruct
   public void init() {
     zipenv.put("create", "true");
@@ -92,7 +95,7 @@ public class FileStore {
 
     URI zipUri = createUri("file:%s/%s-%s.zip", tag, timestamp);
 
-    msGraphCall.upload(new File(zipUri));
+    String uploadMsg = msGraphCall.upload(new File(zipUri));
 
     try {
       Files.delete(Paths.get(zipUri));
@@ -100,6 +103,9 @@ public class FileStore {
       throw new UncheckedIOException(ex);
     }
 
+    if (uploadMsg.equals("Created")) {
+      nodeCache.addTransactionCode(tag, timestamp);
+    }
   }
 
   private URI createUri(final String fmt, final ServiceTag tag, final Long timestamp) {

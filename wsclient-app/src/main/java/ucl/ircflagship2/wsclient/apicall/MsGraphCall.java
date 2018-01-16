@@ -46,6 +46,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import ucl.ircflagship2.wsclient.persist.CacheKey;
 import ucl.ircflagship2.wsclient.persist.NodeCache;
+import ucl.ircflagship2.wsclient.scheduler.ServiceTag;
 
 /**
  *

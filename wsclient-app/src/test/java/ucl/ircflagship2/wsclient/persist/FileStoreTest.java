@@ -44,6 +44,9 @@ public class FileStoreTest {
   @Injectable
   private MsGraphCall msGraphCall;
 
+  @Injectable
+  private NodeCache nodeCache;
+
   @Test
   public void testSave() {
     System.out.println("testSave()");
