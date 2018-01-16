@@ -94,6 +94,7 @@ public class TwitterCall extends BaseCall {
             .queryParam("until", twitterSettings.calculateUntilDate())
             .queryParam("lang", "en")
             .queryParam("result_type", "recent")
+            .queryParam("count", "100")
             .request(MediaType.APPLICATION_JSON_TYPE);
 
   }

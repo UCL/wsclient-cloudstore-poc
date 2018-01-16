@@ -23,6 +23,11 @@
  */
 package ucl.ircflagship2.wsclient.persist;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
@@ -38,7 +43,10 @@ public class NodeCacheTest {
   public void testTransactionCode() {
     System.out.println("testTransactionCode()");
     NodeCache instance = new NodeCache();
-    Long timestamp = System.currentTimeMillis();
+    Long timestamp = LocalDateTime.of(LocalDate.now(), LocalTime.MIN)
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli();
     Long anHourLater = timestamp + 3600000L;
     boolean beforeFirst = instance.hasTransactionCode(ServiceTag.TWITTER, timestamp);
     assertFalse(beforeFirst);
