@@ -23,6 +23,9 @@
  */
 package ucl.ircflagship2.wsclient.persist;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,11 +68,11 @@ public class NodeCache {
 
   @Lock(LockType.READ)
   public boolean hasTransactionCode(ServiceTag serviceTag, Long timestamp) {
-    return transactionCache.contains(concatenate(serviceTag, timestamp));
+    return transactionCache.contains(createCode(serviceTag, timestamp));
   }
 
   public boolean addTransactionCode(ServiceTag serviceTag, Long timestamp) {
-    String code = concatenate(serviceTag, timestamp);
+    String code = createCode(serviceTag, timestamp);
     if (!transactionCache.contains(code)) {
       transactionCache.add(code);
       System.out.println("Add transaction code " + code);
@@ -79,8 +82,18 @@ public class NodeCache {
     }
   }
 
-  private String concatenate(ServiceTag serviceTag, Long timestamp) {
-    return String.format("tx:%s@%s", serviceTag.toString(), timestamp.toString());
+  /*
+    Timestamp must be converted to its date object equivalent. If the collection strategy is daily
+    then the timestamp must be converted to LocalDate before being stored.
+    Default collection strategy is daily (only strategy supported)
+   */
+  private String createCode(ServiceTag serviceTag, Long timestamp) {
+    long toEpochDay = Instant.ofEpochMilli(timestamp)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+            .toEpochDay();
+
+    return String.format("tx:%s@%d", serviceTag.toString(), toEpochDay);
   }
 
 }

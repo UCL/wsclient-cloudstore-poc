@@ -39,12 +39,15 @@ public class NodeCacheTest {
     System.out.println("testTransactionCode()");
     NodeCache instance = new NodeCache();
     Long timestamp = System.currentTimeMillis();
+    Long anHourLater = timestamp + 3600000L;
     boolean beforeFirst = instance.hasTransactionCode(ServiceTag.TWITTER, timestamp);
     assertFalse(beforeFirst);
     boolean firstAdd = instance.addTransactionCode(ServiceTag.TWITTER, timestamp);
     assertTrue(firstAdd);
     boolean afterFirst = instance.hasTransactionCode(ServiceTag.TWITTER, timestamp);
+    boolean afterFirstLater = instance.hasTransactionCode(ServiceTag.TWITTER, anHourLater);
     assertTrue(afterFirst);
+    assertTrue(afterFirstLater);
     boolean addAgain = instance.addTransactionCode(ServiceTag.TWITTER, timestamp);
     assertFalse(addAgain);
   }
