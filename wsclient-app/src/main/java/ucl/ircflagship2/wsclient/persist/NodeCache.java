@@ -23,7 +23,9 @@
  */
 package ucl.ircflagship2.wsclient.persist;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.ejb.LocalBean;
@@ -31,6 +33,7 @@ import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import ucl.ircflagship2.wsclient.scheduler.ServiceTag;
 
 /**
  * Cache for storage of application data obtained from remote servers, such as bearer tokens. When
@@ -46,6 +49,8 @@ public class NodeCache {
 
   private final Map<CacheKey, String> cacheMap = new HashMap<>();
 
+  private final List<String> transactionCache = new ArrayList<>();
+
   @Lock(LockType.READ)
   public Optional<String> getValue(CacheKey key) {
     if (cacheMap.containsKey(key)) {
@@ -56,6 +61,25 @@ public class NodeCache {
 
   public void setValue(CacheKey key, String value) {
     cacheMap.put(key, value);
+  }
+
+  @Lock(LockType.READ)
+  public boolean hasTransactionCode(ServiceTag serviceTag, Long timestamp) {
+    return transactionCache.contains(concatenate(serviceTag, timestamp));
+  }
+
+  public boolean addTransactionCode(ServiceTag serviceTag, Long timestamp) {
+    String code = concatenate(serviceTag, timestamp);
+    if (!transactionCache.contains(code)) {
+      transactionCache.add(code);
+      return (true);
+    } else {
+      return (false);
+    }
+  }
+
+  private String concatenate(ServiceTag serviceTag, Long timestamp) {
+    return String.format("tx:%s@%s", serviceTag.toString(), timestamp.toString());
   }
 
 }
