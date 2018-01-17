@@ -102,6 +102,7 @@ public class TwitterCall extends BaseCall {
   public void onEvent(@Observes @Twitter Long timerLong) {
 
     if (nodeCache.hasTransactionCode(ServiceTag.TWITTER, timerLong)) {
+      log(String.format("Transaction code for timestamp %d has already been completed. Bypassing call", timerLong));
       return;
     }
 
