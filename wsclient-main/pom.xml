@@ -14,7 +14,12 @@
   <properties>
     <dep.glassfish.version>5.0</dep.glassfish.version>
     <plu.appassembler.version>2.0.0</plu.appassembler.version>
-    <conf.appassembler.repo>${project.name}/target/app/repo</conf.appassembler.repo>
+    <plu.heroku.version>2.0.2</plu.heroku.version>
+    <!-- Heroku deployments with Git
+    <conf.appassembler.repo>${project.basedir}/target/app/repo</conf.appassembler.repo>
+    -->
+    <!-- Heroku deployments with Maven plugin -->
+    <conf.appassembler.repo>target/app/repo</conf.appassembler.repo>
     <conf.appassembler.appname>wsclient-app</conf.appassembler.appname>
   </properties>
 
@@ -61,6 +66,17 @@
             </program>
           </programs>
           <repositoryLayout>flat</repositoryLayout>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.heroku.sdk</groupId>
+        <artifactId>heroku-maven-plugin</artifactId>
+        <version>${plu.heroku.version}</version>
+        <configuration>
+          <appName>wsclient-cloudstore-poc-ly4y5z</appName>
+          <processTypes>
+            <worker>sh target/app/bin/glassfish5</worker>
+          </processTypes>
         </configuration>
       </plugin>
     </plugins>

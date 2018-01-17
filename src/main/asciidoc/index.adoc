@@ -62,6 +62,8 @@ This proof-of-concept uses a worker `dyno`.
 
 For more information on Heroku https://devcenter.heroku.com/articles/how-heroku-works
 
+==== Deployment with Git
+
 Heroku allows the deployment of applications from sources in an existing Github repository. With its CLI, the process would be
 
 ....
@@ -92,6 +94,33 @@ It is possible to run the application with Heroku locally, for testing before pu
 
 ....
 heroku local
+....
+
+==== Deployment with Heroku Maven Plugin
+
+It is also possible to build and package the application locally and deploy the artifacts on Heroku
+using the Maven plugin. This method is also recommended when deploying from a CI server like Travis CI.
+
+The application module `wsclient-main` is configured to use this plugin in its `pom.xml`:
+
+....
+<plugin>
+  <groupId>com.heroku.sdk</groupId>
+  <artifactId>heroku-maven-plugin</artifactId>
+  <version>${plu.heroku.version}</version>
+  <configuration>
+    <appName>wsclient-cloudstore-poc-ly4y5z</appName>
+    <processTypes>
+      <worker>sh target/app/bin/glassfish5</worker>
+    </processTypes>
+  </configuration>
+</plugin>
+....
+
+Then the application can be deployed with:
+
+....
+./mvnw clean heroku:deploy -pl wsclient-main
 ....
 
 .OPENSHIFT

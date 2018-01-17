@@ -75,7 +75,7 @@
             <stylesheet>github.css</stylesheet>
             <imagesdir>img</imagesdir>
             <imagesoutdir>img</imagesoutdir>
-	    <icons>font</icons>
+            <icons>font</icons>
           </attributes>
         </configuration>
         <executions>
