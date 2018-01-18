@@ -46,7 +46,6 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import ucl.ircflagship2.wsclient.persist.CacheKey;
 import ucl.ircflagship2.wsclient.persist.NodeCache;
-import ucl.ircflagship2.wsclient.scheduler.ServiceTag;
 
 /**
  *
@@ -115,6 +114,7 @@ public class MsGraphCall extends BaseCall {
             .put(fileEntity);
 
     if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+      fileToUpload.delete();
       throw new ResponseProcessingException(response, "Failed to upload to OneDrive");
     }
 
