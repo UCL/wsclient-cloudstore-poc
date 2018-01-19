@@ -17,8 +17,6 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <plu.tidy.version>1.1.0</plu.tidy.version>
-    <plu.asciidoctor.version>1.5.6</plu.asciidoctor.version>
-    <plu.asciidoctordiagram.version>1.5.4.1</plu.asciidoctordiagram.version>
     <plu.clean.version>3.0.0</plu.clean.version>
   </properties>
 
@@ -49,44 +47,6 @@
             </fileset>
           </filesets>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.asciidoctor</groupId>
-        <artifactId>asciidoctor-maven-plugin</artifactId>
-        <version>${plu.asciidoctor.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctorj-diagram</artifactId>
-            <version>${plu.asciidoctordiagram.version}</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <backend>html5</backend>
-          <outputDirectory>docs</outputDirectory>
-          <preserveDirectories>true</preserveDirectories>
-          <embedAssets>true</embedAssets>
-          <requires>
-            <require>asciidoctor-diagram</require>
-          </requires>
-          <attributes>
-            <project-version>${project.version}</project-version>
-            <sectnums>true</sectnums>
-            <stylesheet>github.css</stylesheet>
-            <imagesdir>img</imagesdir>
-            <imagesoutdir>img</imagesoutdir>
-            <icons>font</icons>
-          </attributes>
-        </configuration>
-        <executions>
-          <execution>
-            <id>output-html</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>process-asciidoc</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

@@ -19,7 +19,7 @@ Devel:: image:https://travis-ci.org/UCL/wsclient-cloudstore-poc.svg?branch=devel
 
 [NOTE]
 .Technical Documentation
-http://github-pages.ucl.ac.uk/wsclient-cloudstore-poc/
+http://github-pages.ucl.ac.uk/wsclient-cloudstore-doc/
 
 toc::[]
 
@@ -28,7 +28,6 @@ toc::[]
 === Requirements
 - JDK 8
 - Optional: A Java EE 8 server (full profile) https://javaee.github.io/glassfish/download
-- Graphviz (for documentation in `src/main/asciidoc`)
 
 ....
 git clone git@github.com:UCL/wsclient-cloudstore-poc.git
